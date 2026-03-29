@@ -1,0 +1,154 @@
+{
+  "page": "common",
+  "description": "Shared UI elements present across multiple pages (header, navigation, footer)",
+  "version": "1.0.0",
+  "author": "QA CaseForge Team",
+  "lastUpdated": "2024-10-26T00:00:00Z",
+  "tags": ["common", "shared", "navigation"],
+  "elements": {
+    "appLogo": {
+      "key": "appLogo",
+      "primary": "header img[alt*='logo' i]",
+      "fallbacks": [
+        "header .logo",
+        "nav img:first-child",
+        "a.logo img"
+      ],
+      "metadata": {
+        "type": "image",
+        "description": "Main application logo in header",
+        "notes": "Usually clickable and links to home/dashboard"
+      }
+    },
+    "userMenuButton": {
+      "key": "userMenuButton",
+      "primary": "[data-testid='user-menu']",
+      "fallbacks": [
+        "button[aria-label*='user menu' i]",
+        "button[aria-label*='account' i]",
+        "header button:has(svg.user-icon)",
+        "header [role='button']:has-text('Profile')"
+      ],
+      "metadata": {
+        "type": "button",
+        "label": "User menu",
+        "description": "Opens user account menu with logout, settings, etc."
+      }
+    },
+    "logoutButton": {
+      "key": "logoutButton",
+      "primary": "[data-testid='logout-button']",
+      "fallbacks": [
+        "button:has-text('Logout')",
+        "button:has-text('Log out')",
+        "button:has-text('Sign out')",
+        "a:has-text('Logout')"
+      ],
+      "metadata": {
+        "type": "button",
+        "text": "Logout",
+        "description": "Signs user out of the application"
+      },
+      "context": {
+        "notes": "May be inside user menu dropdown - open menu first"
+      }
+    },
+    "mainNavigation": {
+      "key": "mainNavigation",
+      "primary": "nav[aria-label='Main navigation']",
+      "fallbacks": [
+        "nav.main-nav",
+        "header nav",
+        "[role='navigation']"
+      ],
+      "metadata": {
+        "type": "container",
+        "description": "Main navigation menu container"
+      }
+    },
+    "dashboardLink": {
+      "key": "dashboardLink",
+      "primary": "a[href='/dashboard']",
+      "fallbacks": [
+        "nav a:has-text('Dashboard')",
+        "a:has-text('Home')",
+        "[role='link']:has-text('Dashboard')"
+      ],
+      "metadata": {
+        "type": "link",
+        "text": "Dashboard",
+        "description": "Link to main dashboard page"
+      }
+    },
+    "settingsLink": {
+      "key": "settingsLink",
+      "primary": "a[href='/settings']",
+      "fallbacks": [
+        "nav a:has-text('Settings')",
+        "a:has-text('Preferences')",
+        "[role='link']:has-text('Settings')"
+      ],
+      "metadata": {
+        "type": "link",
+        "text": "Settings",
+        "description": "Link to settings/preferences page"
+      }
+    },
+    "notificationBell": {
+      "key": "notificationBell",
+      "primary": "[data-testid='notifications']",
+      "fallbacks": [
+        "button[aria-label*='notification' i]",
+        "header button:has(svg.bell-icon)",
+        "button.notification-button"
+      ],
+      "metadata": {
+        "type": "button",
+        "label": "Notifications",
+        "description": "Opens notifications dropdown"
+      }
+    },
+    "searchInput": {
+      "key": "searchInput",
+      "primary": "input[type='search']",
+      "fallbacks": [
+        "input[placeholder*='Search' i]",
+        "input[aria-label*='search' i]",
+        "header input[type='text']"
+      ],
+      "metadata": {
+        "type": "input",
+        "placeholder": "Search...",
+        "description": "Global search input field"
+      }
+    },
+    "footer": {
+      "key": "footer",
+      "primary": "footer",
+      "fallbacks": [
+        "[role='contentinfo']",
+        ".footer",
+        ".site-footer"
+      ],
+      "metadata": {
+        "type": "container",
+        "description": "Page footer container"
+      }
+    },
+    "loadingSpinner": {
+      "key": "loadingSpinner",
+      "primary": "[data-testid='loading']",
+      "fallbacks": [
+        "[role='status']",
+        ".loading-spinner",
+        ".spinner",
+        "svg.animate-spin"
+      ],
+      "metadata": {
+        "type": "other",
+        "description": "Loading indicator/spinner",
+        "notes": "Used to wait for operations to complete"
+      }
+    }
+  }
+}

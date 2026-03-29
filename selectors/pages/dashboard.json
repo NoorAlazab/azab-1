@@ -1,0 +1,130 @@
+{
+  "page": "/dashboard",
+  "description": "Main dashboard page - overview and quick actions",
+  "version": "1.0.0",
+  "author": "QA CaseForge Team",
+  "lastUpdated": "2024-10-26T00:00:00Z",
+  "tags": ["dashboard", "home", "overview"],
+  "elements": {
+    "welcomeMessage": {
+      "key": "welcomeMessage",
+      "primary": "[data-testid='welcome-message']",
+      "fallbacks": [
+        "h1:has-text('Welcome')",
+        ".welcome-message",
+        "header h1"
+      ],
+      "metadata": {
+        "type": "text",
+        "description": "Welcome message with user name",
+        "notes": "Usually contains dynamic user name"
+      }
+    },
+    "generatorLink": {
+      "key": "generatorLink",
+      "primary": "a[href='/generator']",
+      "fallbacks": [
+        "a:has-text('Generator')",
+        "a:has-text('Test Generator')",
+        "[role='link']:has-text('Generator')"
+      ],
+      "metadata": {
+        "type": "link",
+        "text": "Generator",
+        "description": "Link to test case generator page"
+      }
+    },
+    "explorationLink": {
+      "key": "explorationLink",
+      "primary": "a[href='/exploration-v2']",
+      "fallbacks": [
+        "a[href='/exploration']",
+        "a:has-text('Exploration')",
+        "[role='link']:has-text('Exploration')"
+      ],
+      "metadata": {
+        "type": "link",
+        "text": "Exploration",
+        "description": "Link to exploration testing page"
+      }
+    },
+    "integrationsLink": {
+      "key": "integrationsLink",
+      "primary": "a[href='/integrations']",
+      "fallbacks": [
+        "a:has-text('Integrations')",
+        "[role='link']:has-text('Integrations')"
+      ],
+      "metadata": {
+        "type": "link",
+        "text": "Integrations",
+        "description": "Link to integrations management page"
+      }
+    },
+    "recentStoriesTable": {
+      "key": "recentStoriesTable",
+      "primary": "[data-testid='recent-stories']",
+      "fallbacks": [
+        "table",
+        ".stories-table",
+        "[role='table']"
+      ],
+      "metadata": {
+        "type": "table",
+        "description": "Table showing recent Jira stories"
+      }
+    },
+    "activityFeed": {
+      "key": "activityFeed",
+      "primary": "[data-testid='activity-feed']",
+      "fallbacks": [
+        ".activity-feed",
+        "aside ul",
+        "[role='feed']"
+      ],
+      "metadata": {
+        "type": "list",
+        "description": "Activity feed showing recent actions"
+      }
+    },
+    "quickActionCard": {
+      "key": "quickActionCard",
+      "primary": "[data-testid='quick-actions']",
+      "fallbacks": [
+        ".quick-actions",
+        "section:has-text('Quick Actions')"
+      ],
+      "metadata": {
+        "type": "container",
+        "description": "Quick actions card/section"
+      }
+    },
+    "jiraConnectButton": {
+      "key": "jiraConnectButton",
+      "primary": "button:has-text('Connect Jira')",
+      "fallbacks": [
+        "a:has-text('Connect Jira')",
+        "button:has-text('Connect to Jira')",
+        "[data-testid='connect-jira']"
+      ],
+      "metadata": {
+        "type": "button",
+        "text": "Connect Jira",
+        "description": "Button to initiate Jira OAuth connection"
+      }
+    },
+    "jiraStatusChip": {
+      "key": "jiraStatusChip",
+      "primary": "[data-testid='jira-status']",
+      "fallbacks": [
+        ".integration-status",
+        "span:has-text('Connected')",
+        "span:has-text('Disconnected')"
+      ],
+      "metadata": {
+        "type": "text",
+        "description": "Jira connection status indicator"
+      }
+    }
+  }
+}

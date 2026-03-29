@@ -1,0 +1,285 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String   // NEW: for password authentication
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Jira integration
+  jiraConnections   JiraConnection[]
+  jiraToken         JiraToken?
+  testSuites        TestSuite[]
+  verificationTokens VerificationToken[]
+  explorationRuns   ExplorationRun[]
+  explorationPlans  ExplorationPlan[]
+  environmentConfigs EnvironmentConfig[]
+
+  @@map("users")
+}
+
+model JiraConnection {
+  id                   String    @id @default(cuid())
+  userId               String
+  accessTokenEncrypted String
+  refreshTokenEncrypted String?
+  activeCloudId        String?
+  sites                Json      // Array of { id, name, url, scopes }
+  expiresAt            DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("jira_connections")
+}
+
+model TestSuite {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issueKey    String
+  cloudId     String
+  environment String?
+  status      String     @default("draft") // draft|published
+  dirty       Boolean    @default(false)  // true = has unsaved edits
+  lastSavedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  cases       TestCase[]
+  
+  @@unique([userId, issueKey], name: "uniq_user_issue")
+  @@index([userId, issueKey])
+  @@map("test_suites")
+}
+
+model TestCase {
+  id        String   @id @default(cuid())
+  suiteId   String
+  suite     TestSuite @relation(fields: [suiteId], references: [id], onDelete: Cascade)
+  title     String
+  stepsJson Json
+  expected  String
+  priority  String?  // P0|P1|P2|P3
+  type      String?  @default("functional") // functional|negative|boundary|accessibility|security|performance
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("test_cases")
+}
+
+model JiraToken {
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cloudId          String
+  accessToken      String?
+  accessExpiresAt  DateTime?
+  refreshCipher    String    // encrypted refresh_token
+  scope            String?
+  obtainedAt       DateTime  @default(now()) @map("createdAt")
+  updatedAt        DateTime  @updatedAt
+
+  @@map("jira_tokens")
+}
+
+model VerificationToken {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime @default(now())
+
+  @@map("verification_tokens")
+}
+
+model ExplorationPlan {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issueKey         String
+  cloudId          String
+  storySummary     String
+  storyDescription String?
+  objectivesJson   Json     // Objective[]
+  scopeJson        Json     // { allowedHosts, allowedPaths, includeThirdParty, keywords }
+  createdAt        DateTime @default(now())
+  runs             ExplorationRun[]
+
+  @@index([userId, issueKey])
+  @@map("exploration_plans")
+}
+
+model ExplorationRun {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issueKey     String
+  cloudId      String
+  planId       String?
+  plan         ExplorationPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+  environment  String
+  mode         String   // "smoke" | "auth" | "deep" | "a11y"
+  authUsed     Boolean  @default(false)
+  startedAt    DateTime @default(now())
+  finishedAt   DateTime?
+  status       String   @default("running") // running|completed|failed
+  statsJson    Json?
+  bugs         BugFinding[]
+  testExecutions TestExecution[]
+
+  @@index([userId, issueKey])
+  @@map("exploration_runs")
+}
+
+model BugFinding {
+  id          String   @id @default(cuid())
+  runId       String
+  run         ExplorationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  issueKey    String   // parent story key for context
+  objectiveId String?  // linked objective from plan
+  title       String
+  stepsJson   Json
+  severity    String   // S0..S3
+  evidenceUrl String?  // screenshot or artifact
+  relevance   Float?   // 0..1 score for story relevance
+  status      String   @default("new") // new|edited|published
+  jiraKey     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("bug_findings")
+}
+
+model TestExecution {
+  id              String   @id @default(cuid())
+  runId           String
+  run             ExplorationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  testCaseId      String?  // Reference to original test case if applicable
+  testCaseTitle   String
+  testCaseSteps   Json     // Array of step strings
+  expectedResult  String
+  priority        String?  // P0|P1|P2|P3
+  type            String?  // functional|negative|boundary|accessibility|security|performance
+  status          String   @default("pending") // pending|running|passed|failed|skipped|error
+  actualResult    String?  // What actually happened
+  errorMessage    String?
+  screenshotUrl   String?
+  executionLog    Json?    // Detailed step-by-step log: TestStepResult[]
+  duration        Int?     // Duration in milliseconds
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  steps           TestExecutionStep[]
+
+  @@index([runId])
+  @@map("test_executions")
+}
+
+model EnvironmentConfig {
+  id                   String   @id @default(cuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  environmentUrl       String   // Original URL (http://localhost:3000)
+  environmentSlug      String   // Normalized slug (localhost-3000)
+  usernameEncrypted    String?  // Encrypted username for login
+  passwordEncrypted    String?  // Encrypted password for login
+  pagesMetadataJson    Json?    // { "login": { recordedAt, elementCount, ... }, ... }
+  lastRecordedAt       DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  pageSelectors        PageSelector[]
+  pageJourneys         PageJourney[]
+
+  @@unique([userId, environmentSlug])
+  @@index([userId, environmentSlug])
+  @@map("environment_configs")
+}
+
+model PageSelector {
+  id                  String   @id @default(cuid())
+  environmentConfigId String
+  environmentConfig   EnvironmentConfig @relation(fields: [environmentConfigId], references: [id], onDelete: Cascade)
+  pageName            String   // "login", "dashboard", etc.
+  pageUrl             String   // Full URL where page was discovered
+  elementKey          String   // "inputEmail", "buttonSignin", etc.
+  primarySelector     String   // Main CSS selector: "input[name='email']"
+  fallbackSelectors   Json     // Array of fallback selectors: ["input[type='email']", ".email-input"]
+  elementType         String   // "input", "button", "link", etc.
+  elementMetadata     Json     // { label, placeholder, description, etc. }
+  recordedAt          DateTime @default(now())
+  recordedBy          String?  // Story key that triggered recording (e.g., "SCRUM-2")
+
+  // Navigation context (for navigation elements that lead to other pages)
+  isNavigationElement Boolean  @default(false)  // true if this is a nav link/button
+  leadsToPage         String?                   // Target page keyword (e.g., "login", "users")
+  sourcePageName      String?                   // Redundant with pageName, kept for clarity
+
+  // URL caching for optimized navigation (first click discovery, then use URL)
+  discoveredUrl       String?                   // Actual URL reached after clicking this nav element
+  urlLastVerified     DateTime?                 // When this URL was last confirmed to work
+  urlVerificationCount Int @default(0)          // How many times this URL successfully worked
+
+  @@unique([environmentConfigId, pageName, elementKey])
+  @@index([environmentConfigId, pageName])
+  @@index([environmentConfigId, isNavigationElement, leadsToPage])
+  @@map("page_selectors")
+}
+
+model PageJourney {
+  id                  String   @id @default(cuid())
+  environmentConfigId String
+  environmentConfig   EnvironmentConfig @relation(fields: [environmentConfigId], references: [id], onDelete: Cascade)
+  fromPage            String   // Starting page: "dashboard"
+  toPage              String   // Destination page: "login"
+  navigationSteps     Json     // Array of steps: [{ action: "click", target: "linkLogin", url: "..." }]
+  recordedAt          DateTime @default(now())
+
+  @@unique([environmentConfigId, fromPage, toPage])
+  @@index([environmentConfigId])
+  @@map("page_journeys")
+}
+
+model TestExecutionStep {
+  id                   String   @id @default(cuid())
+  testExecutionId      String
+  testExecution        TestExecution @relation(fields: [testExecutionId], references: [id], onDelete: Cascade)
+  stepNumber           Int
+  description          String
+  status               String   // "passed", "failed", "skipped"
+  strategyUsed         String?  // "journey" | "explicit_key" | "fuzzy_match" | "guess" | "url_check"
+  elementKey           String?
+  selectorUsed         String?
+  screenshotBeforeUrl  String?
+  screenshotAfterUrl   String?
+  expectedValue        String?
+  actualValue          String?
+  errorMessage         String?
+  failureReason        String?
+  duration             Int?     // Duration in milliseconds
+  details              String?
+  executedAt           DateTime @default(now())
+
+  @@index([testExecutionId, stepNumber])
+  @@map("test_execution_steps")
+}

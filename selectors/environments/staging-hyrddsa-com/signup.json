@@ -1,0 +1,155 @@
+{
+  "page": "signup",
+  "description": "Selectors for signup page (discovered at https://staging.hyrddsa.com/auth/jobseeker/signup)",
+  "elements": {
+    "button": {
+      "key": "button",
+      "primary": "button.btn",
+      "fallbacks": [],
+      "metadata": {
+        "type": "button",
+        "label": "العربية",
+        "description": "Button: العربية"
+      }
+    },
+    "buttonSignup": {
+      "key": "buttonSignup",
+      "primary": "button.btn",
+      "fallbacks": [],
+      "metadata": {
+        "type": "button",
+        "label": "Sign Up",
+        "description": "Button: Sign Up"
+      }
+    },
+    "inputFirstname": {
+      "key": "inputFirstname",
+      "primary": "[name=\"first_name\"]",
+      "fallbacks": [
+        "[aria-label=\"text-box\"]",
+        "input.form-control"
+      ],
+      "metadata": {
+        "type": "input",
+        "placeholder": "Enter",
+        "name": "first_name",
+        "label": "Enter",
+        "description": "Input field: Enter"
+      }
+    },
+    "inputLastname": {
+      "key": "inputLastname",
+      "primary": "[name=\"last_name\"]",
+      "fallbacks": [
+        "[aria-label=\"text-box\"]",
+        "input.form-control"
+      ],
+      "metadata": {
+        "type": "input",
+        "placeholder": "Enter",
+        "name": "last_name",
+        "label": "Enter",
+        "description": "Input field: Enter"
+      }
+    },
+    "inputEmail": {
+      "key": "inputEmail",
+      "primary": "[name=\"email\"]",
+      "fallbacks": [
+        "[aria-label=\"text-box\"]",
+        "input.form-control"
+      ],
+      "metadata": {
+        "type": "input",
+        "placeholder": "Enter",
+        "name": "email",
+        "label": "Enter",
+        "description": "Input field: Enter"
+      }
+    },
+    "inputPassword": {
+      "key": "inputPassword",
+      "primary": "[name=\"password\"]",
+      "fallbacks": [
+        "[aria-label=\"text-box\"]",
+        "input.form-control"
+      ],
+      "metadata": {
+        "type": "input",
+        "placeholder": "Enter",
+        "name": "password",
+        "label": "Enter",
+        "description": "Input field: Enter"
+      }
+    },
+    "inputPasswordconfirmation": {
+      "key": "inputPasswordconfirmation",
+      "primary": "[name=\"password_confirmation\"]",
+      "fallbacks": [
+        "[aria-label=\"text-box\"]",
+        "input.form-control"
+      ],
+      "metadata": {
+        "type": "input",
+        "placeholder": "Enter",
+        "name": "password_confirmation",
+        "label": "Enter",
+        "description": "Input field: Enter"
+      }
+    },
+    "inputAgreeofprivacypolicy0863870094": {
+      "key": "inputAgreeofprivacypolicy0863870094",
+      "primary": "#agreeOfPrivacyPolicy0.863870094773877",
+      "fallbacks": [
+        "input.custom-control-input"
+      ],
+      "metadata": {
+        "type": "input",
+        "description": "Input field: checkbox"
+      }
+    },
+    "inputAcceptdatacollection0568999427": {
+      "key": "inputAcceptdatacollection0568999427",
+      "primary": "#acceptDataCollection0.5689994272656025",
+      "fallbacks": [
+        "input.custom-control-input"
+      ],
+      "metadata": {
+        "type": "input",
+        "description": "Input field: checkbox"
+      }
+    },
+    "linkLogin": {
+      "key": "linkLogin",
+      "primary": "link.mr-3",
+      "fallbacks": [],
+      "metadata": {
+        "type": "link",
+        "text": "Log In",
+        "description": "Link: Log In"
+      }
+    },
+    "linkPrivacypolicy": {
+      "key": "linkPrivacypolicy",
+      "primary": "link.text-heading",
+      "fallbacks": [],
+      "metadata": {
+        "type": "link",
+        "text": "Privacy Policy",
+        "description": "Link: Privacy Policy"
+      }
+    },
+    "linkTermsconditions": {
+      "key": "linkTermsconditions",
+      "primary": "link.text-heading",
+      "fallbacks": [],
+      "metadata": {
+        "type": "link",
+        "text": "Terms & Conditions",
+        "description": "Link: Terms & Conditions"
+      }
+    }
+  },
+  "version": "1.0",
+  "lastUpdated": "2025-10-29T10:17:47.387Z"
+}

@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qa-caseforge.com/schemas/selector-mapping.json",
+  "title": "Selector Mapping",
+  "description": "Schema for UI element selector mapping files used in exploration testing",
+  "type": "object",
+  "required": ["page", "elements"],
+  "properties": {
+    "page": {
+      "type": "string",
+      "description": "Page path or identifier (e.g., '/login', 'dashboard')",
+      "minLength": 1,
+      "examples": ["/login", "/dashboard", "/settings"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this page"
+    },
+    "baseUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Base URL for this page (optional, overrides default)"
+    },
+    "elements": {
+      "type": "object",
+      "description": "Map of element keys to their selector definitions",
+      "additionalProperties": {
+        "$ref": "#/definitions/elementSelector"
+      },
+      "minProperties": 1
+    },
+    "version": {
+      "type": "string",
+      "description": "Version of this mapping file",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.0.0", "2.1.3"]
+    },
+    "author": {
+      "type": "string",
+      "description": "Author or team who maintains this file"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last updated timestamp (ISO 8601)"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags for categorization",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    }
+  },
+  "definitions": {
+    "elementSelector": {
+      "type": "object",
+      "required": ["key", "primary", "fallbacks", "metadata"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Unique key to identify this element (camelCase)",
+          "pattern": "^[a-z][a-zA-Z0-9]*$",
+          "examples": ["loginButton", "usernameField", "submitButton"]
+        },
+        "primary": {
+          "type": "string",
+          "description": "Primary selector (most reliable)",
+          "minLength": 1,
+          "examples": [
+            "button[data-testid='login']",
+            "#username",
+            "input[name='email']"
+          ]
+        },
+        "fallbacks": {
+          "type": "array",
+          "description": "Fallback selectors (in order of preference)",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "maxItems": 10
+        },
+        "metadata": {
+          "$ref": "#/definitions/elementMetadata"
+        },
+        "context": {
+          "$ref": "#/definitions/elementContext"
+        },
+        "validator": {
+          "type": "string",
+          "description": "Custom validation function name (advanced)"
+        }
+      }
+    },
+    "elementMetadata": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Element type classification",
+          "enum": [
+            "button",
+            "input",
+            "select",
+            "checkbox",
+            "radio",
+            "link",
+            "text",
+            "container",
+            "image",
+            "form",
+            "table",
+            "list",
+            "other"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "description": "Visible text on the element"
+        },
+        "label": {
+          "type": "string",
+          "description": "ARIA label or associated label text"
+        },
+        "description": {
+          "type": "string",
+          "description": "What this element does"
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Placeholder text (for inputs)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name attribute value"
+        },
+        "id": {
+          "type": "string",
+          "description": "ID attribute value"
+        },
+        "lastVerified": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last verified date (ISO 8601)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes"
+        }
+      }
+    },
+    "elementContext": {
+      "type": "object",
+      "description": "Context to help locate elements",
+      "properties": {
+        "nearElement": {
+          "type": "string",
+          "description": "Selector for a nearby element",
+          "examples": ["input[name='email']", "#password-field"]
+        },
+        "insideContainer": {
+          "type": "string",
+          "description": "Selector for container element",
+          "examples": ["form.login-form", "div.checkout-section"]
+        },
+        "index": {
+          "type": "integer",
+          "description": "Index if multiple matches (0-based)",
+          "minimum": 0
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional context notes"
+        }
+      }
+    }
+  }
+}

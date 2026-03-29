@@ -1,0 +1,1 @@
+[{"id":"obj-uitext-jw4hcsrm5","type":"UI_TEXT_MATCH","title":"Verify button text changed to \"login\"","target":{"roles":["button","link"],"texts":["login"]},"steps":["Navigate to the page with the button","Locate the button by role","Verify the button displays \"login\""],"expects":{"textEquals":"login"},"severity":"S1"}]

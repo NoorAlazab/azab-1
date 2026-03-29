@@ -1,0 +1,651 @@
+{
+  "environmentUrl": "https://staging.hyrddsa.com",
+  "environmentSlug": "staging-hyrddsa-com",
+  "pages": [
+    {
+      "pageKeyword": "[\"login\"]",
+      "actualUrl": "https://staging.hyrddsa.com/",
+      "startingUrl": "https://staging.hyrddsa.com/",
+      "steps": [
+        {
+          "action": "click",
+          "target": "Log In",
+          "targetSelector": "a.btn.btn-primary.login-btn[href=\"/auth\"]",
+          "description": "Click 'Log In' in navigation menu",
+          "expectedUrl": "https://staging.hyrddsa.com/"
+        }
+      ],
+      "selectors": {
+        "buttonMenu": {
+          "key": "buttonMenu",
+          "primary": "button.burger-menu-btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "menu",
+            "description": "Button: menu"
+          }
+        },
+        "button": {
+          "key": "button",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "عربي",
+            "description": "Button: عربي"
+          }
+        },
+        "buttonExplorejobs": {
+          "key": "buttonExplorejobs",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "Explore Jobs",
+            "description": "Button: Explore Jobs"
+          }
+        },
+        "buttonSignup": {
+          "key": "buttonSignup",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "Sign Up",
+            "description": "Button: Sign Up"
+          }
+        },
+        "buttonViewapply": {
+          "key": "buttonViewapply",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "View & Apply",
+            "description": "Button: View & Apply"
+          }
+        },
+        "link0": {
+          "key": "link0",
+          "primary": "link",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "description": "Link: #"
+          }
+        },
+        "linkLogin": {
+          "key": "linkLogin",
+          "primary": "link.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": " Log In ",
+            "description": "Link:  Log In "
+          }
+        },
+        "linkSignup": {
+          "key": "linkSignup",
+          "primary": "link.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": " Sign Up ",
+            "description": "Link:  Sign Up "
+          }
+        },
+        "linkViewall": {
+          "key": "linkViewall",
+          "primary": "link.btn-link",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "View All",
+            "description": "Link: View All"
+          }
+        }
+      },
+      "discoveredAt": "2025-10-27T07:20:54.611Z",
+      "environmentSlug": "staging-hyrddsa-com",
+      "alternativeKeywords": [
+        "log"
+      ],
+      "navigationItemText": "Log In"
+    },
+    {
+      "pageKeyword": "login",
+      "actualUrl": "https://staging.hyrddsa.com/auth",
+      "startingUrl": "https://staging.hyrddsa.com/",
+      "steps": [
+        {
+          "action": "click",
+          "target": "Log In",
+          "targetSelector": "a.btn.btn-primary.login-btn[href=\"/auth\"]",
+          "description": "Click 'Log In' in navigation menu",
+          "expectedUrl": "https://staging.hyrddsa.com/auth"
+        }
+      ],
+      "selectors": {
+        "button": {
+          "key": "button",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "العربية",
+            "description": "Button: العربية"
+          }
+        },
+        "buttonSignin": {
+          "key": "buttonSignin",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "Sign In",
+            "description": "Button: Sign In"
+          }
+        },
+        "button2": {
+          "key": "button2",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "description": "Button: unlabeled"
+          }
+        },
+        "button3": {
+          "key": "button3",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "description": "Button: unlabeled"
+          }
+        },
+        "buttonSigninusing": {
+          "key": "buttonSigninusing",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "Sign In Using",
+            "description": "Button: Sign In Using"
+          }
+        },
+        "inputEmail": {
+          "key": "inputEmail",
+          "primary": "[name=\"email\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "you@example.com",
+            "name": "email",
+            "label": "you@example.com",
+            "description": "Input field: you@example.com"
+          }
+        },
+        "inputPassword": {
+          "key": "inputPassword",
+          "primary": "[name=\"password\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "Enter Your Password",
+            "name": "password",
+            "label": "Enter Your Password",
+            "description": "Input field: Enter Your Password"
+          }
+        },
+        "inputRememberme02331354371712917": {
+          "key": "inputRememberme02331354371712917",
+          "primary": "#rememberMe0.2331354371712917",
+          "fallbacks": [
+            "input.custom-control-input"
+          ],
+          "metadata": {
+            "type": "input",
+            "description": "Input field: checkbox"
+          }
+        },
+        "linkSignup": {
+          "key": "linkSignup",
+          "primary": "link.mr-3",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Sign Up",
+            "description": "Link: Sign Up"
+          }
+        },
+        "linkForgetpassword": {
+          "key": "linkForgetpassword",
+          "primary": "#forget-password",
+          "fallbacks": [
+            "link.text-decoration-none"
+          ],
+          "metadata": {
+            "type": "link",
+            "text": "Forget Password?",
+            "description": "Link: Forget Password?"
+          }
+        },
+        "linkResetmultifactorcode": {
+          "key": "linkResetmultifactorcode",
+          "primary": "#forget-mfa",
+          "fallbacks": [
+            "link.text-decoration-none"
+          ],
+          "metadata": {
+            "type": "link",
+            "text": " Reset Multi-Factor code?",
+            "description": "Link:  Reset Multi-Factor code?"
+          }
+        },
+        "linkTermsconditions": {
+          "key": "linkTermsconditions",
+          "primary": "link.text-heading",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Terms & Conditions",
+            "description": "Link: Terms & Conditions"
+          }
+        },
+        "linkPrivacypolicy": {
+          "key": "linkPrivacypolicy",
+          "primary": "link.text-heading",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Privacy Policy",
+            "description": "Link: Privacy Policy"
+          }
+        }
+      },
+      "discoveredAt": "2025-12-28T15:15:00.419Z",
+      "environmentSlug": "staging-hyrddsa-com",
+      "alternativeKeywords": [
+        "log"
+      ],
+      "navigationItemText": "Log In"
+    },
+    {
+      "pageKeyword": "signup",
+      "actualUrl": "https://staging.hyrddsa.com/auth/jobseeker/signup",
+      "startingUrl": "https://staging.hyrddsa.com/",
+      "steps": [
+        {
+          "action": "click",
+          "target": "Sign Up",
+          "targetSelector": "a.btn.btn-primary-outline.signup-btn[href=\"/auth/jobseeker/signup\"]",
+          "description": "Click 'Sign Up' in navigation menu",
+          "expectedUrl": "https://staging.hyrddsa.com/auth/jobseeker/signup"
+        }
+      ],
+      "selectors": {
+        "button": {
+          "key": "button",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "العربية",
+            "description": "Button: العربية"
+          }
+        },
+        "buttonSignup": {
+          "key": "buttonSignup",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "Sign Up",
+            "description": "Button: Sign Up"
+          }
+        },
+        "inputFirstname": {
+          "key": "inputFirstname",
+          "primary": "[name=\"first_name\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "Enter",
+            "name": "first_name",
+            "label": "Enter",
+            "description": "Input field: Enter"
+          }
+        },
+        "inputLastname": {
+          "key": "inputLastname",
+          "primary": "[name=\"last_name\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "Enter",
+            "name": "last_name",
+            "label": "Enter",
+            "description": "Input field: Enter"
+          }
+        },
+        "inputEmail": {
+          "key": "inputEmail",
+          "primary": "[name=\"email\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "Enter",
+            "name": "email",
+            "label": "Enter",
+            "description": "Input field: Enter"
+          }
+        },
+        "inputPassword": {
+          "key": "inputPassword",
+          "primary": "[name=\"password\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "Enter",
+            "name": "password",
+            "label": "Enter",
+            "description": "Input field: Enter"
+          }
+        },
+        "inputPasswordconfirmation": {
+          "key": "inputPasswordconfirmation",
+          "primary": "[name=\"password_confirmation\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "Enter",
+            "name": "password_confirmation",
+            "label": "Enter",
+            "description": "Input field: Enter"
+          }
+        },
+        "inputAgreeofprivacypolicy0863870094": {
+          "key": "inputAgreeofprivacypolicy0863870094",
+          "primary": "#agreeOfPrivacyPolicy0.863870094773877",
+          "fallbacks": [
+            "input.custom-control-input"
+          ],
+          "metadata": {
+            "type": "input",
+            "description": "Input field: checkbox"
+          }
+        },
+        "inputAcceptdatacollection0568999427": {
+          "key": "inputAcceptdatacollection0568999427",
+          "primary": "#acceptDataCollection0.5689994272656025",
+          "fallbacks": [
+            "input.custom-control-input"
+          ],
+          "metadata": {
+            "type": "input",
+            "description": "Input field: checkbox"
+          }
+        },
+        "linkLogin": {
+          "key": "linkLogin",
+          "primary": "link.mr-3",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Log In",
+            "description": "Link: Log In"
+          }
+        },
+        "linkPrivacypolicy": {
+          "key": "linkPrivacypolicy",
+          "primary": "link.text-heading",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Privacy Policy",
+            "description": "Link: Privacy Policy"
+          }
+        },
+        "linkTermsconditions": {
+          "key": "linkTermsconditions",
+          "primary": "link.text-heading",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Terms & Conditions",
+            "description": "Link: Terms & Conditions"
+          }
+        }
+      },
+      "discoveredAt": "2025-10-29T10:17:45.092Z",
+      "environmentSlug": "staging-hyrddsa-com",
+      "alternativeKeywords": [
+        "sign"
+      ],
+      "navigationItemText": "Sign Up"
+    },
+    {
+      "pageKeyword": "log in",
+      "actualUrl": "https://staging.hyrddsa.com/auth",
+      "startingUrl": "https://staging.hyrddsa.com/",
+      "steps": [
+        {
+          "action": "click",
+          "target": "Log In",
+          "targetSelector": "a.btn.btn-primary.login-btn[href=\"/auth\"]",
+          "description": "Click 'Log In' in navigation menu",
+          "expectedUrl": "https://staging.hyrddsa.com/auth"
+        }
+      ],
+      "selectors": {
+        "button": {
+          "key": "button",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "العربية",
+            "description": "Button: العربية"
+          }
+        },
+        "buttonSignin": {
+          "key": "buttonSignin",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "Sign In",
+            "description": "Button: Sign In"
+          }
+        },
+        "button2": {
+          "key": "button2",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "description": "Button: unlabeled"
+          }
+        },
+        "button3": {
+          "key": "button3",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "description": "Button: unlabeled"
+          }
+        },
+        "buttonSigninusing": {
+          "key": "buttonSigninusing",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "label": "Sign In Using",
+            "description": "Button: Sign In Using"
+          }
+        },
+        "button5": {
+          "key": "button5",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "description": "Button: unlabeled"
+          }
+        },
+        "button6": {
+          "key": "button6",
+          "primary": "button.btn",
+          "fallbacks": [],
+          "metadata": {
+            "type": "button",
+            "description": "Button: unlabeled"
+          }
+        },
+        "inputEmail": {
+          "key": "inputEmail",
+          "primary": "[name=\"email\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "you@example.com",
+            "name": "email",
+            "label": "you@example.com",
+            "description": "Input field: you@example.com"
+          }
+        },
+        "inputPassword": {
+          "key": "inputPassword",
+          "primary": "[name=\"password\"]",
+          "fallbacks": [
+            "[aria-label=\"text-box\"]",
+            "input.form-control"
+          ],
+          "metadata": {
+            "type": "input",
+            "placeholder": "Enter Your Password",
+            "name": "password",
+            "label": "Enter Your Password",
+            "description": "Input field: Enter Your Password"
+          }
+        },
+        "inputRememberme06110858951101084": {
+          "key": "inputRememberme06110858951101084",
+          "primary": "#rememberMe0.6110858951101084",
+          "fallbacks": [
+            "input.custom-control-input"
+          ],
+          "metadata": {
+            "type": "input",
+            "description": "Input field: checkbox"
+          }
+        },
+        "linkSignup": {
+          "key": "linkSignup",
+          "primary": "link.mr-3",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Sign Up",
+            "description": "Link: Sign Up"
+          }
+        },
+        "linkForgetpassword": {
+          "key": "linkForgetpassword",
+          "primary": "#forget-password",
+          "fallbacks": [
+            "link.text-decoration-none"
+          ],
+          "metadata": {
+            "type": "link",
+            "text": "Forget Password?",
+            "description": "Link: Forget Password?"
+          }
+        },
+        "linkResetmultifactorcode": {
+          "key": "linkResetmultifactorcode",
+          "primary": "#forget-mfa",
+          "fallbacks": [
+            "link.text-decoration-none"
+          ],
+          "metadata": {
+            "type": "link",
+            "text": " Reset Multi-Factor code?",
+            "description": "Link:  Reset Multi-Factor code?"
+          }
+        },
+        "linkTermsconditions": {
+          "key": "linkTermsconditions",
+          "primary": "link.text-heading",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Terms & Conditions",
+            "description": "Link: Terms & Conditions"
+          }
+        },
+        "linkPrivacypolicy": {
+          "key": "linkPrivacypolicy",
+          "primary": "link.text-heading",
+          "fallbacks": [],
+          "metadata": {
+            "type": "link",
+            "text": "Privacy Policy",
+            "description": "Link: Privacy Policy"
+          }
+        }
+      },
+      "discoveredAt": "2025-11-02T15:06:35.729Z",
+      "environmentSlug": "staging-hyrddsa-com",
+      "alternativeKeywords": [
+        "log"
+      ],
+      "navigationItemText": "Log In"
+    }
+  ],
+  "lastUpdated": "2025-12-29T08:30:19.502Z",
+  "version": "1.0",
+  "loginJourney": {
+    "pageKeyword": "login",
+    "actualUrl": "https://staging.hyrddsa.com/",
+    "startingUrl": "https://staging.hyrddsa.com",
+    "steps": [
+      {
+        "action": "navigate",
+        "description": "Navigate to login page",
+        "expectedUrl": "https://staging.hyrddsa.com/"
+      }
+    ],
+    "selectors": {},
+    "discoveredAt": "2025-12-29T08:30:19.461Z",
+    "environmentSlug": "staging-hyrddsa-com"
+  }
+}

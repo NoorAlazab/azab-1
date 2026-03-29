@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(if exist .next rmdir /s /q .next)",
+      "Bash(if exist tsconfig.tsbuildinfo del tsconfig.tsbuildinfo)",
+      "Bash(npm run build:*)",
+      "Bash(node -p:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
