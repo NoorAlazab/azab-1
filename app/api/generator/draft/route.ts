@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { requireUserId } from "@/lib/auth/iron";
 import { assertValidCsrf } from "@/lib/security/csrf";
 import { generateCasesAI } from "@/lib/ai/generateCases";
+import { deserializeSteps, serializeSteps } from "@/lib/generator/stepsJson";
 import { log } from "@/lib/utils/logger";
 
 export async function POST(req: Request) {
@@ -88,41 +89,27 @@ export async function POST(req: Request) {
     cases: deduped.map((tc: any) => `${tc.title} (${tc.type}, ${tc.priority})`)
   });
 
-  // Handle overwrite mode by deleting existing cases first
+  // Handle overwrite mode by deleting existing cases first.
+  // Single bulk DELETE is one DB round trip vs. one per case.
   if (mode === "overwrite") {
     log.debug('Overwrite mode: deleting existing cases', { module: 'GeneratorDraft', suiteId });
-    const existingCases = await (prisma as any).testCase.findMany({
-      where: { suiteId },
-      select: { id: true }
-    });
-    log.debug('Found existing cases to delete', { module: 'GeneratorDraft', count: existingCases.length });
-
-    for (const testCase of existingCases) {
-      await (prisma as any).testCase.delete({ where: { id: testCase.id } });
-    }
+    const deleted = await (prisma as any).testCase.deleteMany({ where: { suiteId } });
+    log.debug('Deleted existing cases', { module: 'GeneratorDraft', count: deleted.count });
   }
 
-  // Create new test cases
+  // Create new test cases. Steps are stored as native JSON (Prisma serializes);
+  // the previous JSON.stringify call double-encoded the payload.
   log.debug('Creating new test cases', { module: 'GeneratorDraft', count: deduped.length });
-  const casesToCreate = (mode === "append"
-    ? deduped.map((c: any, i: number) => ({
-        suiteId,
-        title: c.title,
-        stepsJson: JSON.stringify(c.steps),
-        expected: c.expected,
-        priority: c.priority ?? null,
-        type: c.type ?? "functional",
-        order: existing.length + i,
-      }))
-    : deduped.map((c: any, i: number) => ({
-        suiteId,
-        title: c.title,
-        stepsJson: JSON.stringify(c.steps),
-        expected: c.expected,
-        priority: c.priority ?? null,
-        type: c.type ?? "functional",
-        order: i,
-      })));
+  const baseOrder = mode === "append" ? existing.length : 0;
+  const casesToCreate = deduped.map((c: any, i: number) => ({
+    suiteId,
+    title: c.title,
+    stepsJson: serializeSteps(c.steps),
+    expected: c.expected,
+    priority: c.priority ?? null,
+    type: c.type ?? "functional",
+    order: baseOrder + i,
+  }));
 
   await (prisma as any).testCase.createMany({ data: casesToCreate });
   
@@ -139,7 +126,7 @@ export async function POST(req: Request) {
     suiteId,
     mode: mode ?? "overwrite",
     count: saved.length,
-    cases: saved.map((c: any) => ({ id:c.id, title:c.title, steps:JSON.parse(c.stepsJson), expected:c.expected, priority:c.priority as any, type:c.type ?? "functional", order:c.order })),
+    cases: saved.map((c: any) => ({ id:c.id, title:c.title, steps:deserializeSteps(c.stepsJson), expected:c.expected, priority:c.priority as any, type:c.type ?? "functional", order:c.order })),
   });
 } catch (error: any) {
   log.error('Unhandled error in draft API', error instanceof Error ? error : new Error(String(error)), { module: 'GeneratorDraft' });

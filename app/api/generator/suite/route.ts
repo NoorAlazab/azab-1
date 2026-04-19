@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { requireUserId } from "@/lib/auth/iron";
 import { assertValidCsrf } from "@/lib/security/csrf";
+import { deserializeSteps } from "@/lib/generator/stepsJson";
 
 export async function POST(req: Request) {
   try { assertValidCsrf(); } catch (e:any) {
@@ -30,6 +31,6 @@ export async function POST(req: Request) {
       dirty: (suite as any).dirty || false,
       lastSavedAt: (suite as any).lastSavedAt || null
     },
-    cases: cases.map(c => ({ id: c.id, title: c.title, steps: c.stepsJson as string[], expected: c.expected, priority: c.priority as any, order: c.order })),
+    cases: cases.map(c => ({ id: c.id, title: c.title, steps: deserializeSteps(c.stepsJson), expected: c.expected, priority: c.priority as any, order: c.order })),
   });
 }
