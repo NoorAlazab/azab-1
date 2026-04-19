@@ -22,8 +22,10 @@ const queryClient = new QueryClient({
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Note: Authentication is handled by middleware.ts
-  // The middleware checks for qacf_session cookie and redirects to /login if not authenticated
+  // Note: middleware.ts performs a lightweight presence-only redirect
+  // for unauthenticated requests (Edge runtime cannot decrypt the
+  // iron-session cookie). Real authentication is enforced server-side
+  // in each route handler via requireUserId() from lib/auth/iron.ts.
 
   return (
     <QueryClientProvider client={queryClient}>

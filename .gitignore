@@ -35,3 +35,9 @@ Thumbs.db
 # Build artifacts
 tsconfig.tsbuildinfo
 build_output.txt
+
+# Local DB snapshots (e.g. Phase 0 baseline backup)
+# NOTE: prisma/dev.db itself is currently tracked; un-tracking it is a
+# separate decision left for the storage-consolidation phase.
+prisma/*.backup
+prisma/dev.db-journal

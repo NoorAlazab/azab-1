@@ -150,7 +150,12 @@ export default function LoginPage() {
           title: "Success",
           description: "Logged in successfully",
         });
-        r.push("/dashboard");
+        const nextParam = searchParams.get("next");
+        const safeNext =
+          nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//")
+            ? nextParam
+            : "/dashboard";
+        r.push(safeNext);
       } else if (res.status === 403 && data.error === "EMAIL_NOT_VERIFIED") {
         setBanner({
           type: 'error',
