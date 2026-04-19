@@ -13,44 +13,18 @@ import { findJourneyByKeyword } from './journeyRepository';
 import type { PageJourney } from '@/types/journey';
 import { log } from '@/lib/utils/logger';
 import { normalizePageKeyword } from '@/lib/utils/pageKeywordNormalizer';
-import fs from 'fs';
-import path from 'path';
+import { saveStepToDatabase } from './testExecutor/db';
+import { captureScreenshot } from './testExecutor/screenshots';
+import type {
+  TestCase,
+  TestStepResult,
+  TestExecutionResult,
+  ElementSelector,
+} from './testExecutor/types';
 
-export interface TestCase {
-  id?: string;
-  title: string;
-  steps: string[];
-  expected: string;
-  priority?: string;
-  type?: string;
-}
-
-export interface TestStepResult {
-  step: string;
-  action: StepAction;
-  success: boolean;
-  error?: string;
-  duration: number;
-  strategyUsed?: string; // NEW: which strategy was used to find element
-  elementKey?: string; // NEW: element key used (if any)
-  selectorUsed?: string; // NEW: actual selector that worked
-  screenshotBeforeUrl?: string; // NEW: screenshot before action
-  screenshotAfterUrl?: string; // NEW: screenshot after action
-  expectedValue?: string; // NEW: expected value for verifications
-  actualValue?: string; // NEW: actual value found
-  failureReason?: string; // NEW: specific failure reason
-  details?: string; // NEW: additional details
-}
-
-export interface TestExecutionResult {
-  testCase: TestCase;
-  status: 'passed' | 'failed' | 'error';
-  steps: TestStepResult[];
-  verification?: VerificationResult;
-  screenshotPath?: string;
-  duration: number;
-  error?: string;
-}
+// Re-export public types so existing `import { TestCase } from '@/lib/exploration/testExecutor'`
+// callers continue to work without modification.
+export type { TestCase, TestStepResult, TestExecutionResult } from './testExecutor/types';
 
 /**
  * Execute a single test case
@@ -216,53 +190,6 @@ export async function executeTestCase(
     duration,
     error,
   };
-}
-
-/**
- * Save a test execution step to the database
- */
-async function saveStepToDatabase(
-  testExecutionId: string,
-  stepNumber: number,
-  description: string,
-  stepResult: TestStepResult
-): Promise<void> {
-  try {
-    const { prisma } = await import('@/lib/db/prisma');
-
-    await prisma.testExecutionStep.create({
-      data: {
-        testExecutionId,
-        stepNumber,
-        description,
-        status: stepResult.success ? 'passed' : 'failed',
-        strategyUsed: stepResult.strategyUsed,
-        elementKey: stepResult.elementKey,
-        selectorUsed: stepResult.selectorUsed,
-        screenshotBeforeUrl: stepResult.screenshotBeforeUrl,
-        screenshotAfterUrl: stepResult.screenshotAfterUrl,
-        expectedValue: stepResult.expectedValue,
-        actualValue: stepResult.actualValue,
-        errorMessage: stepResult.error,
-        failureReason: stepResult.failureReason,
-        duration: stepResult.duration,
-        details: stepResult.details,
-      },
-    });
-
-    log.debug('Saved step to database', {
-      module: 'TestExecutor',
-      testExecutionId,
-      stepNumber,
-      status: stepResult.success ? 'passed' : 'failed',
-    });
-  } catch (error) {
-    log.error('Failed to save step to database', error instanceof Error ? error : new Error(String(error)), {
-      module: 'TestExecutor',
-      testExecutionId,
-      stepNumber,
-    });
-  }
 }
 
 /**
@@ -913,14 +840,6 @@ async function findElementBySelector(
   throw new Error(`Navigation element not found: ${elementSelector.key}`);
 }
 
-// Import ElementSelector type from selectorService
-type ElementSelector = {
-  key: string;
-  primary: string;
-  fallbacks: string[];
-  metadata: Record<string, any>;
-};
-
 /**
  * Execute a single step action
  * Updated to pass environmentConfigId for smart navigation
@@ -1064,34 +983,6 @@ async function executeFallbackStep(step: string, page: Page): Promise<boolean> {
   // Otherwise, log warning and continue
   log.warn('Fallback: treating unknown step as informational', { module: 'TestExecutor', step });
   return true;
-}
-
-/**
- * Capture a screenshot
- */
-async function captureScreenshot(
-  page: Page,
-  screenshotDir: string,
-  name: string
-): Promise<string | undefined> {
-  try {
-    // Ensure directory exists
-    fs.mkdirSync(screenshotDir, { recursive: true });
-
-    const filename = `${name}.png`;
-    const filepath = path.join(screenshotDir, filename);
-
-    await page.screenshot({ path: filepath, fullPage: false });
-
-    // Return relative web path
-    const relativePath = filepath.replace(/\\/g, '/').split('/public/')[1];
-    return `/${relativePath}`;
-  } catch (error) {
-    log.error('Screenshot capture failed', error instanceof Error ? error : new Error(String(error)), {
-      module: 'TestExecutor',
-    });
-    return undefined;
-  }
 }
 
 /**
