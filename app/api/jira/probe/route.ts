@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseIssueKey } from "@/lib/jira/issueKey";
-import { getJiraIssue, JiraError } from "@/lib/jira/api";
+import { JiraError } from "@/lib/jira/errors";
+import { getJiraIssueDB } from "@/lib/jira/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,17 +32,16 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Fetch issue from Jira to validate it exists and get basic info
-    const issue = await getJiraIssue(request, issueKey);
-    
-    // Return basic info for validation
+    // Fetch issue from Jira (database-backed auth) to validate that it
+    // exists and surface basic info to the caller.
+    const issueRaw = await getJiraIssueDB(issueKey);
     return NextResponse.json({
-      key: issue.key,
-      summary: issue.summary,
-      description: issue.description,
-      status: issue.status,
-      projectKey: issue.projectKey,
-      valid: true
+      key: issueRaw.key,
+      summary: issueRaw.fields?.summary ?? "",
+      description: issueRaw.fields?.description ?? "",
+      status: issueRaw.fields?.status?.name ?? "Unknown",
+      projectKey: String(issueRaw.key).split("-")[0],
+      valid: true,
     });
     
   } catch (error) {
