@@ -2,15 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getJiraSessionFromDB } from '@/lib/jira/auth';
 import { prisma } from '@/lib/db/prisma';
 import { requireUserId } from '@/lib/auth/iron';
+import { denyIfProduction } from '@/lib/security/debugGate';
 
 export async function GET(request: NextRequest) {
-  // Disable debug endpoints in production
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(
-      { error: 'Not found' },
-      { status: 404 }
-    );
-  }
+  const blocked = denyIfProduction();
+  if (blocked) return blocked;
 
   try {
     console.log('🔍 [Debug] Checking database stored values...');

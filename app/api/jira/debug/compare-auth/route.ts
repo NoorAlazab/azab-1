@@ -3,6 +3,7 @@ import { getJiraSessionFromDB } from '@/lib/jira/auth';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { ENV } from '@/lib/env';
+import { denyIfProduction } from '@/lib/security/debugGate';
 
 // Try to get session the OLD way (cookie-based)
 async function getOldJiraSession() {
@@ -27,13 +28,8 @@ async function getOldJiraSession() {
 }
 
 export async function GET(request: NextRequest) {
-  // Disable debug endpoints in production
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(
-      { error: 'Not found' },
-      { status: 404 }
-    );
-  }
+  const blocked = denyIfProduction();
+  if (blocked) return blocked;
 
   try {
     console.log('🔍 [Compare] Testing old vs new auth systems...');

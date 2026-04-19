@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentSession } from '@/lib/auth/session';
 import { getApiUrl } from '@/lib/url-helpers';
+import { denyIfProduction } from '@/lib/security/debugGate';
 
 export async function GET(request: NextRequest) {
-  // Disable debug endpoints in production
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(
-      { error: 'Not found' },
-      { status: 404 }
-    );
-  }
+  const blocked = denyIfProduction();
+  if (blocked) return blocked;
 
   try {
     // Clear the existing Jira connection

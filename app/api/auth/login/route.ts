@@ -2,21 +2,28 @@ export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { setUserInSession } from "@/lib/auth/iron";
+import { getDummyHashForTimingMitigation } from "@/lib/auth/argon2Params";
 import argon2 from "argon2";
 
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json().catch(() => ({}));
-    
+
     if (!email || !password) {
       return NextResponse.json({ ok: false, error: "MISSING_FIELDS" }, { status: 400 });
     }
-    
+
     const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+
+    // Timing mitigation: when no user is found we still run argon2.verify
+    // against a fixed dummy hash so the response time does not reveal
+    // whether the email is registered. The result is discarded.
     if (!user) {
+      const dummy = await getDummyHashForTimingMitigation();
+      await argon2.verify(dummy, password).catch(() => false);
       return NextResponse.json({ ok: false, error: "INVALID_CREDENTIALS" }, { status: 401 });
     }
-    
+
     const passwordValid = await argon2.verify(user.passwordHash, password);
     if (!passwordValid) {
       return NextResponse.json({ ok: false, error: "INVALID_CREDENTIALS" }, { status: 401 });
