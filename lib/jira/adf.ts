@@ -2,17 +2,24 @@
  * Convert Atlassian Document Format (ADF) to plain text
  */
 
-interface AdfNode {
+export interface AdfNode {
   type: string;
   content?: AdfNode[];
   text?: string;
-  attrs?: Record<string, any>;
+  attrs?: Record<string, unknown>;
+  marks?: Array<{ type: string; attrs?: Record<string, unknown> }>;
 }
+
+export type AdfDocument = {
+  version: number;
+  type: "doc";
+  content: AdfNode[];
+};
 
 /**
  * Convert ADF JSON to plain text by flattening paragraphs and text nodes
  */
-export function adfToText(adf: any): string {
+export function adfToText(adf: unknown): string {
   if (!adf || typeof adf !== 'object') {
     return typeof adf === 'string' ? adf : JSON.stringify(adf) || '';
   }
@@ -48,7 +55,7 @@ export function adfToText(adf: any): string {
   }
 
   try {
-    const text = extractText(adf);
+    const text = extractText(adf as AdfNode);
     return text.trim() || JSON.stringify(adf);
   } catch (error) {
     console.warn('Failed to parse ADF:', error);
@@ -59,7 +66,7 @@ export function adfToText(adf: any): string {
 /**
  * Convert any value to text - handles both strings and ADF objects
  */
-export function asText(value: any): string {
+export function asText(value: unknown): string {
   if (!value) return '';
   
   if (typeof value === 'string') {
@@ -74,19 +81,19 @@ export function asText(value: any): string {
 }
 
 // Minimal helpers to build a Jira ADF doc that renders fine in comments.
-export function paragraph(text: string) {
+export function paragraph(text: string): AdfNode {
   return { type: "paragraph", content: [{ type: "text", text }] };
 }
 
-export function codeBlock(text: string) {
+export function codeBlock(text: string): AdfNode {
   return { type: "codeBlock", attrs: { language: "markdown" }, content: [{ type: "text", text }] };
 }
 
-export function doc(content: any[]) {
+export function doc(content: AdfNode[]): AdfDocument {
   return { version: 1, type: "doc", content };
 }
 
-export function heading(level: number, text: string) {
+export function heading(level: number, text: string): AdfNode {
   return {
     type: "heading",
     attrs: { level },
@@ -94,7 +101,7 @@ export function heading(level: number, text: string) {
   };
 }
 
-export function orderedList(items: string[]) {
+export function orderedList(items: string[]): AdfNode {
   return {
     type: "orderedList",
     content: items.map(item => ({
@@ -104,7 +111,7 @@ export function orderedList(items: string[]) {
   };
 }
 
-export function strongText(text: string) {
+export function strongText(text: string): AdfNode {
   return {
     type: "text",
     text,
@@ -112,7 +119,7 @@ export function strongText(text: string) {
   };
 }
 
-export function paragraphWithStrong(strongText: string, normalText: string) {
+export function paragraphWithStrong(strongText: string, normalText: string): AdfNode {
   return {
     type: "paragraph",
     content: [
@@ -128,9 +135,9 @@ export function paragraphWithStrong(strongText: string, normalText: string) {
  * the dead module back in for a single helper. For full Markdown support
  * a dedicated library would be needed.
  */
-export function markdownToADF(markdown: string) {
+export function markdownToADF(markdown: string): AdfDocument {
   const lines = markdown.split("\n");
-  const content: any[] = [];
+  const content: AdfNode[] = [];
 
   for (const line of lines) {
     if (line.trim() === "") continue;
@@ -144,7 +151,8 @@ export function markdownToADF(markdown: string) {
       if (!last || last.type !== "bulletList") {
         content.push({ type: "bulletList", content: [] });
       }
-      content[content.length - 1].content.push({
+      const listNode = content[content.length - 1];
+      (listNode.content ??= []).push({
         type: "listItem",
         content: [paragraph(line.substring(2))]
       });

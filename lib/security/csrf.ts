@@ -27,13 +27,19 @@ export function readCsrfHeader(): string | null {
   return (h.get("x-csrf-token") ?? h.get("X-CSRF-Token")) || null;
 }
 
+export class CsrfError extends Error {
+  status = 403 as const;
+  constructor(message = "Invalid CSRF token") {
+    super(message);
+    this.name = "CsrfError";
+  }
+}
+
 /** Throws on failure. Call at the top of POST/PATCH/DELETE handlers. */
-export function assertValidCsrf() {
+export function assertValidCsrf(): void {
   const c = readCsrfCookie();
   const h = readCsrfHeader();
   if (!c || !h || c !== h) {
-    const e: any = new Error("Invalid CSRF token");
-    e.status = 403;
-    throw e;
+    throw new CsrfError();
   }
 }

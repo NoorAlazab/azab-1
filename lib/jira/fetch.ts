@@ -24,7 +24,7 @@ export async function fetchJiraIssue(
   // Get Jira connection for access token
   const jiraConnection = await getJiraConnection(session.userId);
   if (!jiraConnection || !jiraConnection.accessTokenEncrypted) {
-    const err: any = new Error("Jira connection not found");
+    const err = new Error("Jira connection not found") as Error & { code?: string };
     err.code = "NO_JIRA_CONNECTION";
     throw err;
   }

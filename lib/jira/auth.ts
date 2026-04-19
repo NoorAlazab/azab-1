@@ -75,6 +75,9 @@ export async function getJiraSessionFromDB(): Promise<JiraSession | null> {
   }
 }
 
+// Returns the parsed Jira JSON. Caller is responsible for narrowing
+// since payload shape varies per endpoint.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function makeJiraApiCallDB(
   endpoint: string,
   options: RequestInit = {}
@@ -138,7 +141,7 @@ export async function makeJiraApiCallDB(
             
             if (projects.ok) {
               const projectsData = await projects.json();
-              const projectKeys = projectsData.values?.map((p: any) => p.key).slice(0, 5) || [];
+              const projectKeys = projectsData.values?.map((p: { key: string }) => p.key).slice(0, 5) || [];
               if (projectKeys.length > 0) {
                 projectsHint = ` Available project keys: ${projectKeys.join(', ')}`;
               }
@@ -186,6 +189,7 @@ export async function makeJiraApiCallDB(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getJiraIssueDB(issueKey: string): Promise<any> {
   return await makeJiraApiCallDB(`issue/${issueKey}?expand=names,schema,transitions`);
 }

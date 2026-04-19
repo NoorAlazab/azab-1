@@ -103,22 +103,22 @@ export function mapJiraApiError(
 /**
  * Check if an error is a specific Jira error type
  */
-export function isJiraError(error: any, code?: string): error is JiraApiError {
-  if (!error || typeof error !== 'object' || !error.code) {
-    return false;
-  }
-  
+export function isJiraError(error: unknown, code?: string): error is JiraApiError {
+  if (!error || typeof error !== 'object') return false;
+  const e = error as { code?: unknown };
+  if (typeof e.code !== 'string') return false;
+
   if (code) {
-    return error.code === code;
+    return e.code === code;
   }
-  
-  return error.code?.startsWith('JIRA_') === true;
+
+  return e.code.startsWith('JIRA_');
 }
 
 /**
  * Extract user-friendly message from any error
  */
-export function getErrorMessage(error: any, fallback = "An unexpected error occurred"): string {
+export function getErrorMessage(error: unknown, fallback = "An unexpected error occurred"): string {
   if (isJiraError(error)) {
     return error.message;
   }
@@ -155,7 +155,7 @@ export function calculateRetryDelay(attempt: number): number {
 /**
  * Check if an error should be retried
  */
-export function shouldRetryError(error: any): boolean {
+export function shouldRetryError(error: unknown): boolean {
   return isJiraError(error, "JIRA_RATE_LIMIT") || 
          isJiraError(error, "JIRA_SERVER_ERROR");
 }
