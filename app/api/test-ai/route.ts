@@ -1,7 +1,11 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
+import { denyIfProduction } from "@/lib/security/debugGate";
 
 export async function GET() {
+  const blocked = denyIfProduction();
+  if (blocked) return blocked;
+
   const groqKey = process.env.GROQ_API_KEY;
   
   console.log('Testing Groq API key:', {

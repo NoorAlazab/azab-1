@@ -5,6 +5,7 @@ import { createVerificationToken } from "@/lib/auth/emailTokens";
 import { sendEmail } from "@/lib/email/mailer";
 import { renderVerifyEmail } from "@/lib/email/templates/verifyAccount";
 import { getApiUrl } from "@/lib/url-helpers";
+import { ARGON2_HASH_OPTIONS } from "@/lib/auth/argon2Params";
 import argon2 from "argon2";
 
 export async function POST(req: Request) {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
     }
     
     // Create user (not verified by default)
-    const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
+    const passwordHash = await argon2.hash(password, ARGON2_HASH_OPTIONS);
     const user = await prisma.user.create({ 
       data: { 
         email: normalizedEmail, 
