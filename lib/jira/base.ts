@@ -1,4 +1,5 @@
 import type { SessionPayload } from "@/types/auth";
+import { fetchWithRetry } from "@/lib/jira/retry";
 
 /**
  * Get the base URL for Jira API calls using the cloudId
@@ -126,15 +127,26 @@ export async function callJiraApi(
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
   const url = endpoint.startsWith('http') ? endpoint : `${baseUrl}/${cleanEndpoint}`;
   
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      ...options.headers,
+  const response = await fetchWithRetry(
+    () =>
+      fetch(url, {
+        ...options,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      }),
+    {
+      onRetry: ({ attempt, delayMs, reason }) => {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[jira] retrying ${context.action ?? 'request'} (${reason}) attempt=${attempt} after ${delayMs}ms`,
+        );
+      },
     },
-  });
-  
+  );
+
   if (!response.ok) {
     const error = mapJiraError(response, context);
     const errorObj: any = new Error(error.message);
@@ -142,7 +154,7 @@ export async function callJiraApi(
     errorObj.status = error.status;
     throw errorObj;
   }
-  
+
   return response;
 }
 
