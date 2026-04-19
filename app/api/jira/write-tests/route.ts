@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { addCommentToIssue, JiraError } from "@/lib/jira/api";
+import { JiraError } from "@/lib/jira/errors";
+import { makeJiraApiCallDB } from "@/lib/jira/auth";
+import { markdownToADF } from "@/lib/jira/adf";
 import { parseIssueKey } from "@/lib/jira/issueKey";
 
 // Simple validation schema
@@ -66,17 +68,18 @@ export async function POST(request: NextRequest) {
     }
 
     if (mode === "comment") {
-      // Format test cases as markdown and add as comment
       const markdown = formatTestSuiteMarkdown(cases);
-      
-      const comment = await addCommentToIssue(request, issueKey, markdown);
-      
+      const comment = await makeJiraApiCallDB(`issue/${issueKey}/comment`, {
+        method: "POST",
+        body: JSON.stringify({ body: markdownToADF(markdown) }),
+      });
+
       return NextResponse.json({
         success: true,
         issueKey,
         mode,
         casesCount: cases.length,
-        commentId: comment.id
+        commentId: comment.id,
       });
     } else {
       return NextResponse.json(

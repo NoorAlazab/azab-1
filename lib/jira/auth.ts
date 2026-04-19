@@ -3,7 +3,7 @@ import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { ENV } from "@/lib/env";
 import { prisma } from "@/lib/db/prisma";
-import { JiraError, JiraApiError } from "./api";
+import { JiraError } from "./errors";
 import { getSession } from "@/lib/auth/iron";
 import { decrypt } from "@/lib/crypto/secrets";
 import { log } from '@/lib/utils/logger';

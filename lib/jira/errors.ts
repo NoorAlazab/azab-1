@@ -159,3 +159,36 @@ export function shouldRetryError(error: any): boolean {
   return isJiraError(error, "JIRA_RATE_LIMIT") || 
          isJiraError(error, "JIRA_SERVER_ERROR");
 }
+
+/**
+ * Categorical Jira error wrapper, migrated from the deleted
+ * lib/jira/api.ts. Distinct from the JiraApiError interface above:
+ * JiraError is a concrete Error subclass that carries a structured
+ * payload, used by lib/jira/auth.ts (makeJiraApiCallDB) and the route
+ * handlers that catch Jira failures and translate them into HTTP
+ * responses.
+ *
+ * The original `JiraApiError` interface (extending Error, with `.code`)
+ * is preserved above for any future caller that wants to use the
+ * mapJiraApiError() helper.
+ */
+export type JiraErrorCategory =
+  | "auth"
+  | "permission"
+  | "not_found"
+  | "rate_limit"
+  | "server"
+  | "network";
+
+export interface JiraErrorPayload {
+  status: number;
+  message: string;
+  type: JiraErrorCategory;
+}
+
+export class JiraError extends Error {
+  constructor(public jiraError: JiraErrorPayload) {
+    super(jiraError.message);
+    this.name = "JiraError";
+  }
+}

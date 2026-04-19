@@ -1,36 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentSession } from '@/lib/auth/session';
+import { requireUserId } from '@/lib/auth/iron';
 import { getApiUrl } from '@/lib/url-helpers';
 import { denyIfProduction } from '@/lib/security/debugGate';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   const blocked = denyIfProduction();
   if (blocked) return blocked;
 
   try {
-    // Clear the existing Jira connection
-    const session = await getCurrentSession(request);
-    
-    if (!session?.userId) {
+    let userId: string;
+    try {
+      userId = await requireUserId();
+    } catch {
       return NextResponse.json({
         success: false,
-        error: 'Not authenticated'
-      });
+        error: 'Not authenticated',
+      }, { status: 401 });
     }
 
-    // Force a fresh OAuth flow by redirecting to PKCE start
     return NextResponse.json({
       success: true,
-      message: 'Ready to re-authenticate. Click the link below to get fresh Jira connection.',
-      reconnectUrl: getApiUrl('/api/auth/atlassian/pkce/start')
+      userId,
+      message: 'Ready to re-authenticate. Open the reconnectUrl to start a fresh OAuth flow.',
+      reconnectUrl: getApiUrl('/api/auth/atlassian/pkce/start'),
     });
-    
   } catch (error: any) {
-    console.error('❌ [Debug] Reset failed:', error);
-    
+    console.error('[Debug] Reset failed:', error);
     return NextResponse.json({
       success: false,
-      error: error.message
+      error: error.message,
     }, { status: 500 });
   }
 }

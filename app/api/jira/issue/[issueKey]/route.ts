@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getJiraIssue, JiraError } from "@/lib/jira/api";
+import { JiraError } from "@/lib/jira/errors";
 import { getJiraIssueDB } from "@/lib/jira/auth";
 
 export async function GET(

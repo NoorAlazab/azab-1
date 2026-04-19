@@ -121,3 +121,37 @@ export function paragraphWithStrong(strongText: string, normalText: string) {
     ]
   };
 }
+
+/**
+ * Minimal Markdown -> ADF converter (paragraphs, h1/h2, bullet lists).
+ * Migrated from the deprecated lib/jira/api.ts so callers do not pull
+ * the dead module back in for a single helper. For full Markdown support
+ * a dedicated library would be needed.
+ */
+export function markdownToADF(markdown: string) {
+  const lines = markdown.split("\n");
+  const content: any[] = [];
+
+  for (const line of lines) {
+    if (line.trim() === "") continue;
+
+    if (line.startsWith("# ")) {
+      content.push(heading(1, line.substring(2)));
+    } else if (line.startsWith("## ")) {
+      content.push(heading(2, line.substring(3)));
+    } else if (line.startsWith("- ")) {
+      const last = content[content.length - 1];
+      if (!last || last.type !== "bulletList") {
+        content.push({ type: "bulletList", content: [] });
+      }
+      content[content.length - 1].content.push({
+        type: "listItem",
+        content: [paragraph(line.substring(2))]
+      });
+    } else {
+      content.push(paragraph(line));
+    }
+  }
+
+  return doc(content);
+}
