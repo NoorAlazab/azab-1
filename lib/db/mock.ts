@@ -1,16 +1,28 @@
-import { AppUser, SessionPayload, JiraConnection, JiraConnectionLegacy, MagicLinkToken, PKCESession } from "@/types/auth";
+import { AppUser, SessionPayload, JiraConnection, JiraConnectionLegacy, MagicLinkToken } from "@/types/auth";
 
 /**
- * Temporary in-memory storage - replace with real database later
+ * Hybrid storage layer.
+ *
+ * Persistence-critical bits (Checklist, ActivityEvent, PkceSession) are
+ * Prisma-backed via lib/db/checklist.ts, lib/db/activity.ts, and
+ * lib/db/pkce.ts respectively, and re-exported below for back-compat.
+ *
+ * The remaining in-memory maps (sessions, magic links, JiraConnection
+ * snapshot, recent stories cache) are scratch state we intentionally do
+ * not persist:
+ *   - sessions: superseded by iron-session cookies for real sessions.
+ *   - magicLinkTokens: short-lived; will move to Prisma when magic-link
+ *     login is re-enabled.
+ *   - jiraConnections: snapshot of the active site list is also persisted
+ *     in the JiraConnection / JiraToken Prisma models; this map is just a
+ *     fast cache for the dashboard.
  */
 
-// In-memory stores
 const users = new Map<string, AppUser>(); // email -> user
 const usersByEmail = new Map<string, string>(); // email -> userId (for lookups)
 const sessions = new Map<string, SessionPayload>(); // sessionId -> session
 const magicLinkTokens = new Map<string, MagicLinkToken>(); // token -> magicLink
 const jiraConnections = new Map<string, JiraConnection>(); // userId -> jiraConnection
-const pkceStore = new Map<string, PKCESession>(); // nonce -> pkceSession
 
 // User operations
 export async function createUser(email: string): Promise<AppUser> {
@@ -176,46 +188,32 @@ export async function updateActiveJiraSite(userId: string, cloudId: string): Pro
   return true;
 }
 
-// PKCE operations
-export async function savePKCESession(nonce: string, session: PKCESession): Promise<void> {
-  pkceStore.set(nonce, session);
-}
+// PKCE operations now live in lib/db/pkce.ts (Prisma-backed). Re-exported
+// from this module for backward compatibility with existing callers.
+export {
+  savePKCESession,
+  getPKCESession,
+  deletePKCESession,
+} from "@/lib/db/pkce";
 
-export async function getPKCESession(nonce: string): Promise<PKCESession | null> {
-  const session = pkceStore.get(nonce);
-  
-  if (!session) return null;
-  
-  // Check if session is expired
-  if (session.expiresAt < new Date()) {
-    pkceStore.delete(nonce);
-    return null;
-  }
-  
-  return session;
-}
-
-export async function deletePKCESession(nonce: string): Promise<void> {
-  pkceStore.delete(nonce);
-}
-
-// New types for dashboard features
-interface ChecklistItem {
-  connectJira: boolean;
-  configureLLM: boolean;
-  chooseStorageMode: boolean;
-  firstSuite: boolean;
-}
-
-interface ActivityEvent {
-  id: string;
-  type: "generation" | "writeback" | "connection" | "error";
-  title: string;
-  description?: string;
-  status: "success" | "pending" | "error";
-  timestamp: Date;
-  metadata?: Record<string, any>;
-}
+// Checklist + ActivityEvent now live in dedicated Prisma-backed modules
+// (lib/db/checklist.ts and lib/db/activity.ts). Re-exported here so the
+// many existing call sites do not need to change their import paths in a
+// single sweep.
+export {
+  getChecklist,
+  updateChecklistItem,
+  type ChecklistItemKey,
+  type ChecklistView,
+} from "@/lib/db/checklist";
+export {
+  getActivity,
+  addActivityEvent,
+  initializeDemoActivity,
+  type ActivityEventView,
+  type ActivityEventType,
+  type ActivityEventStatus,
+} from "@/lib/db/activity";
 
 interface JiraStory {
   id: string;
@@ -231,78 +229,17 @@ interface JiraStory {
   project: string;
 }
 
-// Additional stores
-const checklistByUserId = new Map<string, ChecklistItem>();
-const activityByUserId = new Map<string, ActivityEvent[]>();
+// Recent-stories cache is still in-memory: it is populated from live Jira
+// search results and is fine to lose on restart (the dashboard re-fetches
+// when the cache is empty).
 const recentStoriesByUserId = new Map<string, JiraStory[]>();
 
-// Checklist operations
-export async function getChecklist(userId: string): Promise<ChecklistItem> {
-  return checklistByUserId.get(userId) || {
-    connectJira: false,
-    configureLLM: false,
-    chooseStorageMode: false,
-    firstSuite: false,
-  };
-}
-
-export async function updateChecklistItem(
-  userId: string,
-  item: keyof ChecklistItem,
-  value: boolean
-): Promise<void> {
-  const current = await getChecklist(userId);
-  const updated = { ...current, [item]: value };
-  checklistByUserId.set(userId, updated);
-  
-  // Add activity event for checklist updates
-  if (value) {
-    await addActivityEvent(userId, {
-      type: "generation",
-      title: `Completed: ${getChecklistItemTitle(item)}`,
-      status: "success",
-    });
-  }
-}
-
-function getChecklistItemTitle(item: keyof ChecklistItem): string {
-  const titles = {
-    connectJira: "Connect Jira",
-    configureLLM: "Configure LLM",
-    chooseStorageMode: "Choose Test Storage Mode",
-    firstSuite: "Generate Your First Suite",
-  };
-  return titles[item];
-}
-
-// Activity operations
-export async function getActivity(
-  userId: string, 
-  options?: { limit?: number; offset?: number }
-): Promise<ActivityEvent[]> {
-  const allActivity = activityByUserId.get(userId) || [];
-  
-  if (!options) return allActivity;
-  
-  const { limit = 10, offset = 0 } = options;
-  return allActivity.slice(offset, offset + limit);
-}
-
-export async function addActivityEvent(userId: string, event: Omit<ActivityEvent, "id" | "timestamp">): Promise<void> {
-  const activity = await getActivity(userId);
-  const newEvent: ActivityEvent = {
-    ...event,
-    id: `${event.type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    timestamp: new Date(),
-  };
-  
-  // Add to beginning and keep only last 50 events
-  activity.unshift(newEvent);
-  if (activity.length > 50) {
-    activity.splice(50);
-  }
-  
-  activityByUserId.set(userId, activity);
+// Initialize demo activity for new users (delegates to the Prisma-backed
+// activity module). Kept under the legacy `initializeDemoData` name so that
+// existing callers keep compiling.
+export async function initializeDemoData(userId: string): Promise<void> {
+  const { initializeDemoActivity } = await import("@/lib/db/activity");
+  await initializeDemoActivity(userId);
 }
 
 // Jira stories operations
@@ -389,57 +326,17 @@ export async function setRecentStories(userId: string, stories: JiraStory[]): Pr
   recentStoriesByUserId.set(userId, stories);
 }
 
-// Initialize demo activity for new users
-export async function initializeDemoData(userId: string): Promise<void> {
-  // Add some sample activity events
-  const demoEvents: Omit<ActivityEvent, "id" | "timestamp">[] = [
-    {
-      type: "connection",
-      title: "Connected to Jira",
-      description: "Successfully connected to Demo Company Jira",
-      status: "success",
-    },
-    {
-      type: "generation",
-      title: "Generated test cases for DEMO-123",
-      description: "Created 8 test cases for magic link authentication",
-      status: "success",
-    },
-    {
-      type: "writeback",
-      title: "Synced test cases to Jira",
-      description: "Added test cases as comments to DEMO-123",
-      status: "success",
-    },
-  ];
-  
-  for (const event of demoEvents) {
-    await addActivityEvent(userId, event);
-  }
-}
-
-// Cleanup expired items periodically
+// Background cleanup for the still-in-memory stores (sessions, magic links).
+// PKCE expiry now happens lazily inside lib/db/pkce.ts (and via the index
+// on PkceSession.expiresAt for callers that explicitly prune).
 setInterval(() => {
   const now = new Date();
-  
-  // Clean up expired sessions
+
   sessions.forEach((session, sessionId) => {
-    if (session.expiresAt < now) {
-      sessions.delete(sessionId);
-    }
+    if (session.expiresAt < now) sessions.delete(sessionId);
   });
-  
-  // Clean up expired magic link tokens
+
   magicLinkTokens.forEach((magicLink, token) => {
-    if (magicLink.expiresAt < now) {
-      magicLinkTokens.delete(token);
-    }
+    if (magicLink.expiresAt < now) magicLinkTokens.delete(token);
   });
-  
-  // Clean up expired PKCE sessions
-  pkceStore.forEach((session, nonce) => {
-    if (session.expiresAt < now) {
-      pkceStore.delete(nonce);
-    }
-  });
-}, 60 * 1000); // Run cleanup every minute
+}, 60 * 1000);

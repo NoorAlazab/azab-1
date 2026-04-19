@@ -31,7 +31,52 @@ model User {
   explorationPlans  ExplorationPlan[]
   environmentConfigs EnvironmentConfig[]
 
+  // Dashboard state
+  checklist         Checklist?
+  activityEvents    ActivityEvent[]
+
   @@map("users")
+}
+
+model Checklist {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectJira        Boolean  @default(false)
+  configureLLM       Boolean  @default(false)
+  chooseStorageMode  Boolean  @default(false)
+  firstSuite         Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("checklists")
+}
+
+model ActivityEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String   // "generation" | "writeback" | "connection" | "error"
+  title       String
+  description String?
+  status      String   // "success" | "pending" | "error"
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("activity_events")
+}
+
+model PkceSession {
+  nonce        String   @id
+  codeVerifier String
+  state        String
+  returnTo     String?
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  @@index([expiresAt])
+  @@map("pkce_sessions")
 }
 
 model JiraConnection {
