@@ -6,11 +6,10 @@
 
 import type { Page, Locator } from 'playwright';
 import { parseStep, findElement as findElementByGuessing, type StepAction } from './stepParser';
-import { verifyTextExists, verifyElementExists, verifyUrl, type VerificationResult } from './verificationEngine';
+import { verifyTextExists, verifyUrl, type VerificationResult } from './verificationEngine';
 import { findElementByKey } from './selectorRepository';
 import { mapToElementKey, inferPageName } from './elementKeyMapper';
 import { findJourneyByKeyword } from './journeyRepository';
-import type { PageJourney } from '@/types/journey';
 import { log } from '@/lib/utils/logger';
 import { normalizePageKeyword } from '@/lib/utils/pageKeywordNormalizer';
 import { saveStepToDatabase } from './testExecutor/db';

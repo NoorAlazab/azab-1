@@ -26,7 +26,7 @@ export function RecordingProgressComponent({ pages, totalPages }: RecordingProgr
           Recording Element Selectors
         </CardTitle>
         <CardDescription>
-          Learning your website's interface for accurate testing...
+          Learning your website&apos;s interface for accurate testing...
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

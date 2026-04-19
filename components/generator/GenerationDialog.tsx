@@ -75,7 +75,7 @@ export function GenerationDialog({
             </Button>
           </div>
           <p className="text-sm text-muted-foreground">
-            Configure how test cases should be generated. Use "Generate from Story" to apply these settings.
+            Configure how test cases should be generated. Use &quot;Generate from Story&quot; to apply these settings.
           </p>
         </CardHeader>
         <CardContent>

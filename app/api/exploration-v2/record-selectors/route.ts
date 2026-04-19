@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     const page = await context.newPage();
 
     try {
-      let results;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let journeys: any[] = [];
 
       // ALWAYS use journey-based recording (clicking UI, not URL assumptions)
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 
       // Use provided page keywords
       // If no pages specified, discoverPages will scan ALL navigation items
-      let pageKeywords = pages.length > 0 ? pages : [];
+      const pageKeywords = pages.length > 0 ? pages : [];
 
       if (pageKeywords.length === 0) {
         log.debug('No page keywords provided, will discover all visible navigation', {
@@ -158,8 +158,7 @@ export async function POST(request: NextRequest) {
         storyKey
       );
 
-      // Merge cached results with newly recorded results
-      results = [...cachedResults, ...journeyResult.results];
+      const results = [...cachedResults, ...journeyResult.results];
       journeys = journeyResult.journeys;
 
       log.debug('Journey-based recording complete', {

@@ -52,7 +52,6 @@ export async function GET(req: Request) {
     };
 
     let tokenRes: Response;
-    let tokens: any;
 
     if (ENV.ATLASSIAN_CLIENT_SECRET) {
       // Try with client secret first
@@ -118,7 +117,13 @@ export async function GET(req: Request) {
       tokenRes = res;
     }
 
-    tokens = await tokenRes.json(); // { access_token, refresh_token, expires_in, token_type }
+    const tokens: {
+      access_token: string;
+      refresh_token?: string;
+      expires_in?: number;
+      token_type?: string;
+      scope?: string;
+    } = await tokenRes.json();
     log.auth('Token exchange successful', undefined, { module: 'AtlassianCallback' });
 
     // Immediately verify the token with /me endpoint
@@ -169,7 +174,7 @@ export async function GET(req: Request) {
     // Encrypt tokens for database storage
     const accessTokenEncrypted = encryptToken(tokens.access_token);
     const refreshTokenEncrypted = tokens.refresh_token ? encryptToken(tokens.refresh_token) : null;
-    const expiresAt = new Date(Date.now() + tokens.expires_in * 1000);
+    const expiresAt = new Date(Date.now() + Number(tokens.expires_in ?? 3600) * 1000);
 
     // Save Jira connection to database (existing approach)
     const jiraConnection = await createOrUpdateJiraConnection(
@@ -193,16 +198,16 @@ export async function GET(req: Request) {
         cloudId: activeCloudIdForToken,
         accessToken: encrypt(tokens.access_token), // Encrypt access token
         accessExpiresAt: new Date(Date.now() + Number(tokens.expires_in || 3600) * 1000),
-        refreshCipher: encrypt(tokens.refresh_token),
-        scope: tokens.scope,
+        refreshCipher: encrypt(tokens.refresh_token ?? ""),
+        scope: tokens.scope ?? null,
       },
       create: {
         userId,
         cloudId: activeCloudIdForToken,
         accessToken: encrypt(tokens.access_token), // Encrypt access token
         accessExpiresAt: new Date(Date.now() + Number(tokens.expires_in || 3600) * 1000),
-        refreshCipher: encrypt(tokens.refresh_token),
-        scope: tokens.scope,
+        refreshCipher: encrypt(tokens.refresh_token ?? ""),
+        scope: tokens.scope ?? null,
       },
     });
 

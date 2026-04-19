@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { TestPriority, TestType, WriteMode } from "./types";
 
 // Issue key validation (PROJECT-NUMBER format)
 export const IssueKeySchema = z.string().regex(

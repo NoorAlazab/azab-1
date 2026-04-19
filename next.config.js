@@ -33,9 +33,9 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   eslint: {
-    // Existing codebase has many style-only lint warnings.
-    // Surface them via `npm run lint` but don't fail the production build.
-    ignoreDuringBuilds: true,
+    // Lint errors fail the build; warnings (e.g. `any`, unused vars in
+    // legacy components) still surface via `npm run lint` but don't block.
+    ignoreDuringBuilds: false,
   },
   async headers() {
     return [

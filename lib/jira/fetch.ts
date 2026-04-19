@@ -1,4 +1,4 @@
-import { getJiraConnection, saveJiraConnectionForUser } from "@/lib/db/mock";
+import { getJiraConnection } from "@/lib/db/mock";
 import { requireActiveCloudIdOrThrow, callJiraApi } from "@/lib/jira/base";
 import type { SessionPayload } from "@/types/auth";
 

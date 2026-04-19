@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
         let expected: string | undefined;
         let observed: string | undefined;
         let url: string | undefined;
-        let candidates: Array<{ role: string; name: string; selectorShort: string }> = [];
+        const candidates: Array<{ role: string; name: string; selectorShort: string }> = [];
 
         for (const step of steps) {
           if (step.startsWith('Expected:')) {

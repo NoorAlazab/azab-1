@@ -25,7 +25,8 @@ export const POST = withRoute(
   async ({ userId, body }) => {
     if (!userId) return apiError("AUTH_REQUIRED", 401);
 
-    let { suiteId, issueKey, cloudId, story, mode, coverage, maxCases, cases } = body;
+    const { issueKey, cloudId, story, mode, coverage, maxCases, cases } = body;
+    let suiteId = body.suiteId;
 
     if (!suiteId) {
       if (!issueKey || !cloudId) {

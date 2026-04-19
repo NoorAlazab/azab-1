@@ -304,7 +304,7 @@ function TestCaseCard({ testCase, caseIndex, onCaseChange, onRemoveCase }: TestC
               {testCase.steps.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
                   <Edit3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p>No test steps yet. Click "Add Step" to get started.</p>
+                  <p>No test steps yet. Click &quot;Add Step&quot; to get started.</p>
                 </div>
               )}
             </div>
