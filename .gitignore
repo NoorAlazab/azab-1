@@ -31,3 +31,7 @@ Thumbs.db
 *.temp
 .cache/
 /generated/prisma
+
+# Build artifacts
+tsconfig.tsbuildinfo
+build_output.txt

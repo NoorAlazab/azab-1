@@ -299,7 +299,7 @@ function generateGenericPageScreenshot(
  */
 function wrapText(text: string, maxChars: number, x: number, y: number, fontSize: number): string {
   const words = text.split(' ');
-  let lines: string[] = [];
+  const lines: string[] = [];
   let currentLine = '';
 
   for (const word of words) {
