@@ -151,7 +151,7 @@ export function GettingStarted({ checklist, onUpdateItem, onItemAction }: Gettin
               🎉 All set up!
             </h3>
             <p className="text-xs text-green-700 dark:text-green-200 mb-3">
-              You've completed the initial setup. Start generating test cases from your Jira stories.
+              You&apos;ve completed the initial setup. Start generating test cases from your Jira stories.
             </p>
             <Button size="sm" onClick={() => onItemAction?.('explore')}>
               Explore Features

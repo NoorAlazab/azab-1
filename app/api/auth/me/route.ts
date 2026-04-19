@@ -21,7 +21,7 @@ export async function GET() {
     return NextResponse.json({ ok: false, error: 'User not found' }, { status: 404 });
   }
 
-  const jt = await (prisma as any).jiraToken.findUnique({ where: { userId: s.userId } });
+  const jt = await prisma.jiraToken.findUnique({ where: { userId: s.userId } });
   const connected = Boolean(jt?.refreshCipher);
   
   // Generate initials from name or email

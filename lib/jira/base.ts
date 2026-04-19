@@ -31,7 +31,7 @@ export function requireActiveCloudIdOrThrow(session: SessionPayload | null): {
   siteName?: string; 
 } {
   if (!session) {
-    const err: any = new Error("No session found. Please log in.");
+    const err = new Error("No session found. Please log in.") as Error & { code?: string };
     err.code = "NO_SESSION";
     throw err;
   }
@@ -40,7 +40,7 @@ export function requireActiveCloudIdOrThrow(session: SessionPayload | null): {
   if (!cloudId) {
     const siteCount = session?.jira?.sites?.length ?? 0;
     const hint = siteCount > 1 ? "Select a Jira site first." : "Connect Jira first.";
-    const err: any = new Error(`No active Jira site. ${hint}`);
+    const err = new Error(`No active Jira site. ${hint}`) as Error & { code?: string };
     err.code = "NO_ACTIVE_CLOUD_ID";
     throw err;
   }
@@ -149,7 +149,7 @@ export async function callJiraApi(
 
   if (!response.ok) {
     const error = mapJiraError(response, context);
-    const errorObj: any = new Error(error.message);
+    const errorObj = new Error(error.message) as Error & { code?: string; status?: number };
     errorObj.code = error.code;
     errorObj.status = error.status;
     throw errorObj;

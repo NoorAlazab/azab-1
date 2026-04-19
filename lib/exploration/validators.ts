@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { ExplorationMode, ExplorationSource, ExplorationConfig, ExplorationRole } from "./types";
 
 // Jira story key validation (project-number format)
 const jiraKeyPattern = /^[A-Z][A-Z0-9]+-\d+$/;

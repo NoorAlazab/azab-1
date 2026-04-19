@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
         let observedText = '';
         let testUrl = bug.run.environment;
         let objectiveInfo = '';
-        let candidates: Array<{ name: string; role: string }> = [];
+        const candidates: Array<{ name: string; role: string }> = [];
 
         if (typeof bug.stepsJson === 'object' && bug.stepsJson !== null && !Array.isArray(bug.stepsJson)) {
           const stepsData = bug.stepsJson as any;

@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { decrypt, encrypt } from "@/lib/crypto/secrets";
 import { fetchWithRetry } from "@/lib/jira/retry";
@@ -40,7 +41,7 @@ const refreshLocks = new Map<string, Promise<FreshTokenResult | null>>();
 export async function getFreshAccessTokenForUser(
   userId: string,
 ): Promise<FreshTokenResult | null> {
-  const rec = await (prisma as any).jiraToken.findUnique({ where: { userId } });
+  const rec = await prisma.jiraToken.findUnique({ where: { userId } });
   if (!rec) return null;
 
   const now = Date.now();
@@ -86,13 +87,13 @@ export async function getFreshAccessTokenForUser(
     const tok = await res.json();
     const accessToken = tok.access_token as string;
     const expiresAt = new Date(Date.now() + Number(tok.expires_in || 3600) * 1000);
-    const data: any = {
+    const data: Prisma.JiraTokenUpdateInput = {
       accessToken: encrypt(accessToken),
       accessExpiresAt: expiresAt,
       scope: tok.scope ?? rec.scope,
     };
     if (tok.refresh_token) data.refreshCipher = encrypt(tok.refresh_token);
-    await (prisma as any).jiraToken.update({ where: { userId }, data });
+    await prisma.jiraToken.update({ where: { userId }, data });
     return { accessToken, cloudId: rec.cloudId, expiresAt };
   })();
 

@@ -1,6 +1,9 @@
 import { randomId } from "@/lib/crypto";
-import { MagicLinkToken } from "@/types/auth";
-import { createMagicLinkToken, getMagicLinkToken, useMagicLinkToken } from "@/lib/db/mock";
+import {
+  createMagicLinkToken,
+  getMagicLinkToken,
+  useMagicLinkToken as consumeMagicLinkToken,
+} from "@/lib/db/mock";
 import { log } from '@/lib/utils/logger';
 import { getMagicLinkUrl } from '@/lib/url-helpers';
 
@@ -28,8 +31,7 @@ export async function verifyMagicLink(token: string): Promise<string | null> {
     return null;
   }
   
-  // Mark token as used
-  const success = await useMagicLinkToken(token);
+  const success = await consumeMagicLinkToken(token);
   if (!success) {
     return null;
   }

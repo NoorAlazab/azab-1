@@ -194,7 +194,7 @@ export function TestCaseCard({ testCase, index, onUpdate, onDelete, onDuplicate,
                 ))}
                 {editData.steps.length === 0 && (
                   <div className="text-center py-4 text-xs text-muted-foreground border-2 border-dashed rounded">
-                    No steps added yet. Click "Add Step" to get started.
+                    No steps added yet. Click &quot;Add Step&quot; to get started.
                   </div>
                 )}
               </div>

@@ -3,20 +3,18 @@
  * Error objects, Response objects, and other unserializable types.
  */
 
-export function safeReplacer(): (key: string, value: any) => any {
-  const seen = new WeakSet();
-  
-  return function(key: string, value: any) {
-    // Handle primitives
+export function safeReplacer(): (key: string, value: unknown) => unknown {
+  const seen = new WeakSet<object>();
+
+  return function(_key: string, value: unknown) {
     if (value === null || typeof value !== "object") {
       return value;
     }
-    
-    // Handle circular references
-    if (seen.has(value)) {
+
+    if (seen.has(value as object)) {
       return "[Circular]";
     }
-    seen.add(value);
+    seen.add(value as object);
     
     // Handle Error objects
     if (value instanceof Error) {
@@ -77,21 +75,19 @@ export function safeReplacer(): (key: string, value: any) => any {
       return `[Function: ${value.name || 'anonymous'}]`;
     }
     
-    // Handle React elements/components (they often have circular refs)
-    if (value && typeof value === 'object' && value.$$typeof) {
+    if (value && typeof value === 'object' && (value as { $$typeof?: unknown }).$$typeof) {
       return "[React Element]";
     }
-    
-    // Handle DOM nodes
+
     if (typeof Node !== 'undefined' && value instanceof Node) {
       return `[${value.nodeName}]`;
     }
-    
+
     return value;
   };
 }
 
-export function safeStringify(value: any, space: number = 2): string {
+export function safeStringify(value: unknown, space: number = 2): string {
   try {
     const result = JSON.stringify(value, safeReplacer(), space);
     

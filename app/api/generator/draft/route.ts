@@ -25,7 +25,8 @@ export const POST = withRoute(
   async ({ userId, body }) => {
     if (!userId) return apiError("AUTH_REQUIRED", 401);
 
-    let { suiteId, issueKey, cloudId, story, mode, coverage, maxCases, cases } = body;
+    const { issueKey, cloudId, story, mode, coverage, maxCases, cases } = body;
+    let suiteId = body.suiteId;
 
     if (!suiteId) {
       if (!issueKey || !cloudId) {
@@ -33,7 +34,7 @@ export const POST = withRoute(
           message: "Either suiteId or both issueKey and cloudId are required.",
         });
       }
-      const created = await (prisma as any).testSuite.upsert({
+      const created = await prisma.testSuite.upsert({
         where: { uniq_user_issue: { userId, issueKey } },
         update: { cloudId },
         create: { userId, issueKey, cloudId },
@@ -41,7 +42,7 @@ export const POST = withRoute(
       suiteId = created.id;
     }
 
-    const suite = await (prisma as any).testSuite.findFirst({ where: { id: suiteId, userId } });
+    const suite = await prisma.testSuite.findFirst({ where: { id: suiteId, userId } });
     if (!suite) return apiError("SUITE_NOT_FOUND", 404);
 
     let out: Array<{
@@ -80,17 +81,26 @@ export const POST = withRoute(
       log.debug("AI generation completed", { module: "GeneratorDraft", count: out.length });
     }
 
-    const existing = await (prisma as any).testCase.findMany({
+    const existing = await prisma.testCase.findMany({
       where: { suiteId },
       orderBy: { order: "asc" },
     });
 
-    const deduped = mode === "append"
-      ? dedupeByTitle([...existing.map((x: any) => ({ title: x.title })), ...out]).slice(existing.length)
-      : dedupeByTitle(out);
+    // In "append" mode, drop any incoming case whose normalized title
+    // already exists in the suite — then dedupe the remainder against
+    // itself. In "overwrite" mode the existing rows are wiped below, so
+    // we just dedupe the incoming batch.
+    let deduped: typeof out;
+    if (mode === "append") {
+      const existingTitles = new Set(existing.map((x) => x.title.trim().toLowerCase()));
+      const fresh = out.filter((c) => !existingTitles.has(c.title.trim().toLowerCase()));
+      deduped = dedupeByTitle(fresh);
+    } else {
+      deduped = dedupeByTitle(out);
+    }
 
     if (mode === "overwrite") {
-      const deleted = await (prisma as any).testCase.deleteMany({ where: { suiteId } });
+      const deleted = await prisma.testCase.deleteMany({ where: { suiteId } });
       log.debug("Deleted existing cases", { module: "GeneratorDraft", count: deleted.count });
     }
 
@@ -105,14 +115,14 @@ export const POST = withRoute(
       order: baseOrder + i,
     }));
 
-    await (prisma as any).testCase.createMany({ data: casesToCreate });
+    await prisma.testCase.createMany({ data: casesToCreate });
 
-    await (prisma as any).testSuite.update({
+    await prisma.testSuite.update({
       where: { id: suiteId },
       data: { status: "draft", dirty: true },
     });
 
-    const saved = await (prisma as any).testCase.findMany({
+    const saved = await prisma.testCase.findMany({
       where: { suiteId },
       orderBy: { order: "asc" },
     });
@@ -122,12 +132,12 @@ export const POST = withRoute(
       suiteId,
       mode: mode ?? "overwrite",
       count: saved.length,
-      cases: saved.map((c: any) => ({
+      cases: saved.map((c) => ({
         id: c.id,
         title: c.title,
         steps: deserializeSteps(c.stepsJson),
         expected: c.expected,
-        priority: c.priority as any,
+        priority: c.priority,
         type: c.type ?? "functional",
         order: c.order,
       })),

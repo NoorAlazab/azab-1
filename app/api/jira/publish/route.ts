@@ -15,8 +15,8 @@ export async function POST(req: Request) {
     const { suiteId, mode } = await req.json().catch(()=> ({}));
     if (!suiteId) return NextResponse.json({ ok:false, error:"MISSING_FIELDS" }, { status:400 });
 
-    const suite = await (prisma as any).testSuite.findFirst({ where: { id: suiteId, userId } });
-    const count = await (prisma as any).testCase.count({ where: { suiteId } });
+    const suite = await prisma.testSuite.findFirst({ where: { id: suiteId, userId } });
+    const count = await prisma.testCase.count({ where: { suiteId } });
     if (!suite || count === 0) {
       return NextResponse.json({ ok:false, error:"NO_SAVED_CASES", message:"No saved test cases for this story. Click Save first." }, { status: 409 });
     }
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok:false, error:"UNSAVED_CHANGES", message:"You have unsaved changes. Please click Save, then Publish." }, { status: 409 });
     }
     
-    const cases = await (prisma as any).testCase.findMany({ where: { suiteId }, orderBy: { order: "asc" } });
+    const cases = await prisma.testCase.findMany({ where: { suiteId }, orderBy: { order: "asc" } });
 
     const fresh = await getFreshAccessTokenForUser(userId);
     if (!fresh) return NextResponse.json({ ok:false, error:"UNAUTHORIZED", message:"Reconnect Jira" }, { status:401 });
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
       const storyUrl = `${baseUrl}/browse/${issueKey}`;
       const commentUrl = `${storyUrl}?focusedCommentId=${commentData.id}&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-${commentData.id}`;
       
-      await (prisma as any).testSuite.update({ where: { id: suiteId }, data: { status: "published" } });
+      await prisma.testSuite.update({ where: { id: suiteId }, data: { status: "published" } });
       
       return NextResponse.json({ 
         ok: true, 
@@ -190,7 +190,7 @@ export async function POST(req: Request) {
             const priority = mapPriority(testCase.priority);
             const priorityLabel = priority ? priority.name : testCase.priority;
             const summary = `TC: ${testCase.title}${priorityLabel ? ` [${priorityLabel}]` : ""}`;
-            const description = buildTestCaseDescription(testCase, issueKey, suite.environment);
+            const description = buildTestCaseDescription(testCase, issueKey, suite.environment ?? undefined);
 
             // Try creating subtask with different payload configurations
             const attemptCreateSubtask = async (fields: any) => {
@@ -296,8 +296,7 @@ export async function POST(req: Request) {
           created.push(...batchResults);
         }
 
-        // 6. Update suite status and return success
-        await (prisma as any).testSuite.update({
+        await prisma.testSuite.update({
           where: { id: suiteId },
           data: { status: "published" }
         });

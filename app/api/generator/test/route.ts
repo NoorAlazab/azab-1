@@ -4,14 +4,13 @@ import { prisma } from "@/lib/db/prisma";
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = requireUserId();
-    
-    // Test basic database connectivity
-    const suiteCount = await (prisma as any).testSuite.count({
-      where: { userId }
+    const userId = await requireUserId();
+
+    const suiteCount = await prisma.testSuite.count({
+      where: { userId },
     });
-    
-    const caseCount = await (prisma as any).testCase.count();
+
+    const caseCount = await prisma.testCase.count();
     
     return NextResponse.json({
       status: "ok",
