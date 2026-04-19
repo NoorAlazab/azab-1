@@ -5,8 +5,14 @@ import { createVerificationToken } from "@/lib/auth/emailTokens";
 import { sendEmail } from "@/lib/email/mailer";
 import { renderVerifyEmail } from "@/lib/email/templates/verifyAccount";
 import { getApiUrl } from "@/lib/url-helpers";
+import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
 
 export async function POST(req: Request) {
+  // Per-IP cap so the resend endpoint cannot be used to spam an
+  // inbox even when the per-user 60s throttle is fresh.
+  const blocked = await enforceRateLimit(req, Limiters.auth());
+  if (blocked) return blocked;
+
   try {
     const { email } = await req.json().catch(() => ({}));
     

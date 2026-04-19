@@ -6,12 +6,18 @@ import { getFreshAccessTokenForUser } from "@/lib/jira/tokenService";
 import { paragraph, codeBlock, doc, heading, orderedList, paragraphWithStrong } from "@/lib/jira/adf";
 import { assertValidCsrf } from "@/lib/security/csrf";
 import { safeStringify, toDisplayDetail } from "@/lib/utils/safeStringify";
+import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
 
 export async function POST(req: Request) {
   try { assertValidCsrf(); } catch(e:any){ return new Response(JSON.stringify({error:"Invalid CSRF token"}), {status:403}); }
 
   try {
     const userId = await requireUserId();
+    // Cap Jira write throughput per user — Atlassian's own quotas are
+    // generous but their account-level abuse detection is not, and a
+    // bug in our retry loop should not be allowed to burn through them.
+    const blocked = await enforceRateLimit(req, Limiters.jiraWrite(), userId);
+    if (blocked) return blocked;
     const { suiteId, mode } = await req.json().catch(()=> ({}));
     if (!suiteId) return NextResponse.json({ ok:false, error:"MISSING_FIELDS" }, { status:400 });
 

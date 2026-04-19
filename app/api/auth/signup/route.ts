@@ -6,9 +6,15 @@ import { sendEmail } from "@/lib/email/mailer";
 import { renderVerifyEmail } from "@/lib/email/templates/verifyAccount";
 import { getApiUrl } from "@/lib/url-helpers";
 import { ARGON2_HASH_OPTIONS } from "@/lib/auth/argon2Params";
+import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
 import argon2 from "argon2";
 
 export async function POST(req: Request) {
+  // Rate limit anonymous signups by IP — argon2 hashing is the most
+  // CPU-expensive operation in the entire app, so we MUST guard it.
+  const blocked = await enforceRateLimit(req, Limiters.auth());
+  if (blocked) return blocked;
+
   try {
     const { email, name, password } = await req.json().catch(() => ({}));
     
