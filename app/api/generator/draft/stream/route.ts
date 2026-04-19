@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { generateCasesAIStream, type StreamEvent } from "@/lib/ai/generateCasesStream";
 import { withRoute } from "@/lib/api/withRoute";
 import { apiError } from "@/lib/api/response";
+import { Limiters } from "@/lib/security/rateLimit";
 import { z } from "zod";
 
 /**
@@ -45,7 +46,14 @@ const streamBodySchema = z.object({
 });
 
 export const POST = withRoute(
-  { auth: true, csrf: true, body: streamBodySchema },
+  {
+    auth: true,
+    csrf: true,
+    body: streamBodySchema,
+    // Same per-user budget as the non-streaming variant — both routes
+    // hit Groq, so they share the same bucket name in the limiter.
+    rateLimit: Limiters.aiGenerate,
+  },
   async ({ userId, body }) => {
     if (!userId) return apiError("AUTH_REQUIRED", 401);
 

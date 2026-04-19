@@ -3,6 +3,11 @@ import type { ZodSchema, ZodError } from "zod";
 import { apiError } from "@/lib/api/response";
 import { assertValidCsrf } from "@/lib/security/csrf";
 import { requireUserId } from "@/lib/auth/iron";
+import {
+  getIdentifier,
+  rateLimitHeaders,
+  type RateLimiter,
+} from "@/lib/security/rateLimit";
 
 /**
  * Higher-order wrapper for App Router route handlers.
@@ -38,6 +43,14 @@ type WithRouteOptions<TBody> = {
   auth?: boolean;
   csrf?: boolean;
   body?: ZodSchema<TBody>;
+  /**
+   * Optional rate limiter. The route is rejected with 429 if the
+   * request exceeds the limit. Identifier is the userId when
+   * available, otherwise the client IP. Standard X-RateLimit-*
+   * headers are added to ALL responses (allowed + rejected) so
+   * clients can self-throttle.
+   */
+  rateLimit?: RateLimiter | (() => RateLimiter);
 };
 
 type RouteContext<TBody> = {
@@ -77,6 +90,35 @@ export function withRoute<TBody = unknown>(
         }
       }
 
+      // Rate limit check happens AFTER auth so we can identify by
+      // userId, but BEFORE body parsing so we never spend cycles
+      // validating bodies for rejected callers.
+      let rateLimitResponseHeaders: Record<string, string> | null = null;
+      if (options.rateLimit) {
+        const limiter =
+          typeof options.rateLimit === "function"
+            ? options.rateLimit()
+            : options.rateLimit;
+        const id = getIdentifier(req, userId);
+        const result = await limiter.limit(id);
+        rateLimitResponseHeaders = rateLimitHeaders(result);
+        if (!result.success) {
+          const retryAfter = Math.max(
+            1,
+            Math.ceil((result.reset - Date.now()) / 1000),
+          );
+          const rejected = apiError("RATE_LIMITED", 429, {
+            message: "Too many requests. Please slow down.",
+            details: { retryAfterSeconds: retryAfter },
+          });
+          rejected.headers.set("Retry-After", String(retryAfter));
+          for (const [k, v] of Object.entries(rateLimitResponseHeaders)) {
+            rejected.headers.set(k, v);
+          }
+          return rejected;
+        }
+      }
+
       let body: TBody = undefined as unknown as TBody;
       if (options.body && isMutation) {
         let raw: unknown;
@@ -97,7 +139,13 @@ export function withRoute<TBody = unknown>(
         body = parsed.data;
       }
 
-      return await handler({ req, userId, body });
+      const response = await handler({ req, userId, body });
+      if (rateLimitResponseHeaders && response instanceof Response) {
+        for (const [k, v] of Object.entries(rateLimitResponseHeaders)) {
+          response.headers.set(k, v);
+        }
+      }
+      return response;
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("[withRoute] unhandled error", err);

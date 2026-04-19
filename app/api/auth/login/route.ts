@@ -4,8 +4,15 @@ import { prisma } from "@/lib/db/prisma";
 import { setUserInSession } from "@/lib/auth/iron";
 import { getDummyHashForTimingMitigation } from "@/lib/auth/argon2Params";
 import argon2 from "argon2";
+import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
 
 export async function POST(req: Request) {
+  // Per-IP rate limit BEFORE any DB or argon2 work so we cannot be
+  // ground down by a credential-stuffing flood. Identified by IP
+  // because the caller is by definition not yet authenticated.
+  const blocked = await enforceRateLimit(req, Limiters.auth());
+  if (blocked) return blocked;
+
   try {
     const { email, password } = await req.json().catch(() => ({}));
 

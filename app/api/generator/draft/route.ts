@@ -7,6 +7,7 @@ import { log } from "@/lib/utils/logger";
 import { withRoute } from "@/lib/api/withRoute";
 import { apiError } from "@/lib/api/response";
 import { generatorDraftSchema } from "@/lib/api/schemas";
+import { Limiters } from "@/lib/security/rateLimit";
 
 /**
  * POST /api/generator/draft
@@ -21,7 +22,15 @@ import { generatorDraftSchema } from "@/lib/api/schemas";
  */
 
 export const POST = withRoute(
-  { auth: true, csrf: true, body: generatorDraftSchema },
+  {
+    auth: true,
+    csrf: true,
+    body: generatorDraftSchema,
+    // AI generation is the single most expensive operation we expose
+    // (Groq quota + token cost). Cap per-user calls so a runaway
+    // client cannot drain the API budget.
+    rateLimit: Limiters.aiGenerate,
+  },
   async ({ userId, body }) => {
     if (!userId) return apiError("AUTH_REQUIRED", 401);
 
