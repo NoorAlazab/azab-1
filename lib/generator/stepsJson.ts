@@ -16,14 +16,22 @@
  * separate task; this helper is the safe intermediate step.
  */
 
+import type { Prisma } from "@prisma/client";
+
 export type Step = {
   action?: string;
   expected?: string;
   [key: string]: unknown;
 };
 
-export function serializeSteps(steps: Step[] | unknown): unknown {
-  return steps;
+/**
+ * Coerce the in-memory steps array into the exact type Prisma expects
+ * for a `Json` column input. The runtime value is unchanged — we just
+ * help the typechecker bridge the gap between application-side `Step[]`
+ * and Prisma-side `InputJsonValue`.
+ */
+export function serializeSteps(steps: Step[] | unknown): Prisma.InputJsonValue {
+  return steps as Prisma.InputJsonValue;
 }
 
 export function deserializeSteps(stepsJson: unknown): Step[] {

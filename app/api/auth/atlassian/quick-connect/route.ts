@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   if (!fresh) {
     return NextResponse.json({ ok: false, reason: "no_token" }, { status: 404 });
   }
-  const site = await (prisma as any).jiraToken.findFirst({ where: { userId }, select: { cloudId: true } });
+  const site = await prisma.jiraToken.findFirst({ where: { userId }, select: { cloudId: true } });
 
   return NextResponse.json({
     ok: true,

@@ -187,7 +187,7 @@ export async function GET(req: Request) {
 
     // Also save to new JiraToken table for the new token service
     const activeCloudIdForToken = activeCloudId || (sites && sites.length > 0 ? sites[0].id : "");
-    await (prisma as any).jiraToken.upsert({
+    await prisma.jiraToken.upsert({
       where: { userId },
       update: {
         cloudId: activeCloudIdForToken,
