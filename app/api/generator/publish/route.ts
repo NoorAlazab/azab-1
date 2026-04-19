@@ -205,17 +205,18 @@ async function publishAsSubtasks(
     const parentIssue = await issueResponse.json();
     const projectKey = parentIssue.fields.project.key;
 
-    // Create subtasks for each test case
-    const createdSubtasks = [];
-
-    for (const testCase of cases) {
+    // Create subtasks in parallel with bounded concurrency to avoid
+    // (a) the previous N-second serial wait for N test cases and
+    // (b) hitting the Jira REST rate limit.
+    const SUBTASK_CONCURRENCY = 4;
+    const createSubtask = async (testCase: TestCase) => {
       const subtaskData = {
         fields: {
           project: { key: projectKey },
           parent: { key: issueKey },
           summary: testCase.title,
           description: formatTestCaseAsDescription(testCase),
-          issuetype: { name: "Sub-task" }, // This might need to be "Subtask" depending on Jira instance
+          issuetype: { name: "Sub-task" }, // May be "Subtask" on some Jira instances
           priority: mapPriorityToJira(testCase.priority),
         },
       };
@@ -235,17 +236,30 @@ async function publishAsSubtasks(
 
       if (subtaskResponse.ok) {
         const subtask = await subtaskResponse.json();
-        createdSubtasks.push({
-          key: subtask.key,
-          id: subtask.id,
-          title: testCase.title,
-        });
-      } else {
-        console.error("Failed to create subtask:", {
-          testCase: testCase.title,
-          status: subtaskResponse.status,
-          statusText: subtaskResponse.statusText,
-        });
+        return {
+          ok: true as const,
+          subtask: {
+            key: subtask.key,
+            id: subtask.id,
+            title: testCase.title,
+          },
+        };
+      }
+
+      console.error("Failed to create subtask:", {
+        testCase: testCase.title,
+        status: subtaskResponse.status,
+        statusText: subtaskResponse.statusText,
+      });
+      return { ok: false as const, title: testCase.title };
+    };
+
+    const createdSubtasks: Array<{ key: string; id: string; title: string }> = [];
+    for (let i = 0; i < cases.length; i += SUBTASK_CONCURRENCY) {
+      const batch = cases.slice(i, i + SUBTASK_CONCURRENCY);
+      const results = await Promise.all(batch.map(createSubtask));
+      for (const result of results) {
+        if (result.ok) createdSubtasks.push(result.subtask);
       }
     }
 
