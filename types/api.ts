@@ -22,10 +22,6 @@ export interface SessionResponse {
   };
 }
 
-export interface MagicLinkStartResponse {
-  ok: boolean;
-}
-
 export interface AtlassianStartResponse {
   authorizeUrl: string;
 }
@@ -65,10 +61,6 @@ export const emailSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-export const magicLinkCallbackSchema = z.object({
-  token: z.string().min(1, "Token is required"),
-});
-
 export const atlassianCallbackSchema = z.object({
   code: z.string().min(1, "Authorization code is required"),
   state: z.string().min(1, "State parameter is required"),
@@ -79,6 +71,5 @@ export const csrfTokenSchema = z.object({
 });
 
 export type EmailRequest = z.infer<typeof emailSchema>;
-export type MagicLinkCallbackRequest = z.infer<typeof magicLinkCallbackSchema>;
 export type AtlassianCallbackRequest = z.infer<typeof atlassianCallbackSchema>;
 export type CSRFTokenRequest = z.infer<typeof csrfTokenSchema>;
