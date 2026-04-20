@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { getJiraConnection } from "@/lib/db/mock";
-import { decryptToken, refreshAccessToken, encryptToken } from "@/lib/oauth/atlassian";
-import { saveJiraConnection } from "@/lib/db/mock";
-import { PublishBodySchema } from "@/lib/generator/validators";
-import type { PublishResponse, TestCase, WriteMode } from "@/lib/generator/types";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getJiraConnection } from "@/lib/server/db/mock";
+import { decryptToken, refreshAccessToken, encryptToken } from "@/lib/server/oauth/atlassian";
+import { saveJiraConnection } from "@/lib/server/db/mock";
+import { PublishBodySchema } from "@/lib/server/generator/validators";
+import type { PublishResponse, TestCase, WriteMode } from "@/lib/server/generator/types";
 
 export async function POST(request: NextRequest) {
   try {

@@ -7,6 +7,7 @@ node_modules/
 # Testing
 /test-results/
 /playwright-report/
+/playwright-results.json
 /blob-report/
 /playwright/.cache/
 

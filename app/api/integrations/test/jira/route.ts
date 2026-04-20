@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getJiraSessionFromDB } from '@/lib/jira/auth';
-import { log } from '@/lib/utils/logger';
-import { getSession } from '@/lib/auth/iron';
+import { getJiraSessionFromDB } from '@/lib/server/jira/auth';
+import { log } from '@/lib/shared/utils/logger';
+import { getSession } from '@/lib/server/auth/iron';
 
 export async function POST() {
   try {

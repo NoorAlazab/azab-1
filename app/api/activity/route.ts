@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { requireUserId } from "@/lib/auth/iron";
-import { getActivity } from "@/lib/db/mock";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getActivity } from "@/lib/server/db/mock";
 
 const activityQuerySchema = z.object({
   limit: z.coerce.number().min(1).max(100).default(10),

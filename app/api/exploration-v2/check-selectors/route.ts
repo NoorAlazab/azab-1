@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { checkPagesRecorded, getEnvironmentConfig } from '@/lib/exploration/environmentManager';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { checkPagesRecorded, getEnvironmentConfig } from '@/lib/server/exploration/environmentManager';
 import type { CheckSelectorsResult } from '@/types/environment';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 /**
  * GET /api/exploration-v2/check-selectors

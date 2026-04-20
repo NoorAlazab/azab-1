@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { getJiraConnection } from '@/lib/db/database';
-import { prisma } from '@/lib/db/prisma';
-import { getApiUrl } from '@/lib/url-helpers';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { getJiraConnection } from '@/lib/server/db/database';
+import { prisma } from '@/lib/server/db/prisma';
+import { getApiUrl } from '@/lib/shared/url-helpers';
 import { z } from 'zod';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 const StartExplorationSchema = z.object({
   storyKey: z.string().min(1),

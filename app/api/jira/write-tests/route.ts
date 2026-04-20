@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { JiraError } from "@/lib/jira/errors";
-import { makeJiraApiCallDB } from "@/lib/jira/auth";
-import { markdownToADF } from "@/lib/jira/adf";
-import { parseIssueKey } from "@/lib/jira/issueKey";
+import { JiraError } from "@/lib/server/jira/errors";
+import { makeJiraApiCallDB } from "@/lib/server/jira/auth";
+import { markdownToADF } from "@/lib/server/jira/adf";
+import { parseIssueKey } from "@/lib/server/jira/issueKey";
 
 // Simple validation schema
 const PublishBodySchema = z.object({

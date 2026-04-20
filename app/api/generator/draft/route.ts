@@ -1,13 +1,13 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { generateCasesAI } from "@/lib/ai/generateCases";
-import { deserializeSteps, serializeSteps } from "@/lib/generator/stepsJson";
-import { log } from "@/lib/utils/logger";
-import { withRoute } from "@/lib/api/withRoute";
-import { apiError } from "@/lib/api/response";
-import { generatorDraftSchema } from "@/lib/api/schemas";
-import { Limiters } from "@/lib/security/rateLimit";
+import { prisma } from "@/lib/server/db/prisma";
+import { generateCasesAI } from "@/lib/server/ai/generateCases";
+import { deserializeSteps, serializeSteps } from "@/lib/server/generator/stepsJson";
+import { log } from "@/lib/shared/utils/logger";
+import { withRoute } from "@/lib/shared/api/withRoute";
+import { apiError } from "@/lib/shared/api/response";
+import { generatorDraftSchema } from "@/lib/shared/api/schemas";
+import { Limiters } from "@/lib/server/security/rateLimit";
 
 /**
  * POST /api/generator/draft

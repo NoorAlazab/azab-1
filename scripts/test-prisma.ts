@@ -1,6 +1,6 @@
 // Test script to verify Prisma setup
-import { prisma } from '../lib/db/prisma';
-import { createUser, getJiraConnection } from '../lib/db/database';
+import { prisma } from '../lib/server/db/prisma';
+import { createUser, getJiraConnection } from '../lib/server/db/database';
 
 async function testPrismaSetup() {
   console.log('Testing Prisma setup...');
@@ -32,7 +32,7 @@ async function testPrismaSetup() {
 }
 
 // Add missing import
-import { getUserById } from '../lib/db/database';
+import { getUserById } from '../lib/server/db/database';
 
 // Run if called directly
 if (require.main === module) {

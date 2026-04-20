@@ -3,12 +3,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { ConnectionCard } from "@/components/dashboard/ConnectionCard";
-import { QuickActions } from "@/components/dashboard/QuickActions";
-import { QuickAddTests } from "@/components/dashboard/QuickAddTests";
-import { RecentStories } from "@/components/dashboard/RecentStories";
-import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
-import { GettingStarted } from "@/components/dashboard/GettingStarted";
+import { ConnectionCard } from "@/components/features/dashboard/ConnectionCard";
+import { QuickActions } from "@/components/features/dashboard/QuickActions";
+import { QuickAddTests } from "@/components/features/dashboard/QuickAddTests";
+import { RecentStories } from "@/components/features/dashboard/RecentStories";
+import { ActivityFeed } from "@/components/features/dashboard/ActivityFeed";
+import { GettingStarted } from "@/components/features/dashboard/GettingStarted";
 import { IntegrationStatusChip } from "@/components/layout/IntegrationStatusChip";
 import {
   Card,
@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RefreshCw, AlertCircle } from "lucide-react";
-import type { DashboardOverview } from "@/lib/dashboard/getDashboardOverview";
+import type { DashboardOverview } from "@/lib/server/dashboard/getDashboardOverview";
 
 /**
  * Dashboard interactive shell.

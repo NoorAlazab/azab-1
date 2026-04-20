@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { recordSelectorsWithJourneys, createPageMetadata } from '@/lib/exploration/selectorRecorder';
-import { saveEnvironmentConfig, normalizeEnvironmentUrl, updatePagesMetadata } from '@/lib/exploration/environmentManager';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { recordSelectorsWithJourneys, createPageMetadata } from '@/lib/server/exploration/selectorRecorder';
+import { saveEnvironmentConfig, normalizeEnvironmentUrl, updatePagesMetadata } from '@/lib/server/exploration/environmentManager';
 import type { RecordSelectorsRequest, RecordSelectorsResponse } from '@/types/environment';
-import { log } from '@/lib/utils/logger';
-import { normalizePageKeyword } from '@/lib/utils/pageKeywordNormalizer';
+import { log } from '@/lib/shared/utils/logger';
+import { normalizePageKeyword } from '@/lib/shared/utils/pageKeywordNormalizer';
 
 export const maxDuration = 300; // 5 minutes max for recording
 
@@ -99,8 +99,8 @@ export async function POST(request: NextRequest) {
       });
 
       // NEW: Check for cached selectors before recording
-      const { getEnvironmentConfig: getEnvConfigEarly } = await import('@/lib/exploration/environmentManager');
-      const { checkExistingSelectors } = await import('@/lib/db/selectorService');
+      const { getEnvironmentConfig: getEnvConfigEarly } = await import('@/lib/server/exploration/environmentManager');
+      const { checkExistingSelectors } = await import('@/lib/server/db/selectorService');
 
       const earlyEnvConfig = await getEnvConfigEarly(userId, environment);
       const cachedResults: any[] = [];
@@ -183,9 +183,9 @@ export async function POST(request: NextRequest) {
       }
 
       // Save selectors to database (NEW: database-first storage)
-      const { getEnvironmentConfig } = await import('@/lib/exploration/environmentManager');
-      const { saveSelectorsToDatabase, saveJourneyToDatabase, saveNavigationSelector } = await import('@/lib/db/selectorService');
-      const { loadSelectorMapping } = await import('@/lib/exploration/selectorRepository');
+      const { getEnvironmentConfig } = await import('@/lib/server/exploration/environmentManager');
+      const { saveSelectorsToDatabase, saveJourneyToDatabase, saveNavigationSelector } = await import('@/lib/server/db/selectorService');
+      const { loadSelectorMapping } = await import('@/lib/server/exploration/selectorRepository');
 
       // Get or create environment config
       const envConfig = await getEnvironmentConfig(userId, environment);

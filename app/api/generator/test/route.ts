@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { prisma } from "@/lib/db/prisma";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { prisma } from "@/lib/server/db/prisma";
 
 export async function GET(request: NextRequest) {
   try {

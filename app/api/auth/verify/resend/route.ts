@@ -1,11 +1,11 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { createVerificationToken } from "@/lib/auth/emailTokens";
-import { sendEmail } from "@/lib/email/mailer";
-import { renderVerifyEmail } from "@/lib/email/templates/verifyAccount";
-import { getApiUrl } from "@/lib/url-helpers";
-import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
+import { prisma } from "@/lib/server/db/prisma";
+import { createVerificationToken } from "@/lib/server/auth/emailTokens";
+import { sendEmail } from "@/lib/server/email/mailer";
+import { renderVerifyEmail } from "@/lib/server/email/templates/verifyAccount";
+import { getApiUrl } from "@/lib/shared/url-helpers";
+import { Limiters, enforceRateLimit } from "@/lib/server/security/rateLimit";
 
 export async function POST(req: Request) {
   // Per-IP cap so the resend endpoint cannot be used to spam an

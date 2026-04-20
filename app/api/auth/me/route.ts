@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/iron";
-import { prisma } from "@/lib/db/prisma";
+import { getSession } from "@/lib/server/auth/iron";
+import { prisma } from "@/lib/server/db/prisma";
 
 export async function GET() {
   const s = await getSession();

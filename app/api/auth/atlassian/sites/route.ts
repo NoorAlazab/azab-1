@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { getJiraConnection } from "@/lib/db/mock";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getJiraConnection } from "@/lib/server/db/mock";
 import type { JiraSite } from "@/types/auth";
 
 export async function GET(request: NextRequest) {

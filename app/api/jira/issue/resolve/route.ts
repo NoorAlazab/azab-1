@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseIssueKey } from "@/lib/jira/issueKey";
-import { asText } from "@/lib/jira/adf";
-import { assertValidCsrf } from "@/lib/security/csrf";
-import { requireUserId } from "@/lib/auth/iron";
-import { getFreshAccessTokenForUser } from "@/lib/jira/tokenService";
+import { parseIssueKey } from "@/lib/server/jira/issueKey";
+import { asText } from "@/lib/server/jira/adf";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getFreshAccessTokenForUser } from "@/lib/server/jira/tokenService";
 
 export const runtime = "nodejs";
 

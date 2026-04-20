@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getSession } from '@/lib/auth/iron';
-import { prisma } from '@/lib/db/prisma';
-import { log } from '@/lib/utils/logger';
+import { getSession } from '@/lib/server/auth/iron';
+import { prisma } from '@/lib/server/db/prisma';
+import { log } from '@/lib/shared/utils/logger';
 
 export async function GET() {
   try {

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
-import { toDisplayDetail } from "@/lib/utils/safeStringify";
+import { toDisplayDetail } from "@/lib/shared/utils/safeStringify";
 
 interface ResultModalProps {
   isOpen: boolean;

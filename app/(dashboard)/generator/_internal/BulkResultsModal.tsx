@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
-import { safeStringify } from "@/lib/utils/safeStringify";
+import { safeStringify } from "@/lib/shared/utils/safeStringify";
 import type { BulkPublishResult } from "./types";
 
 /**

@@ -1,12 +1,12 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { createVerificationToken } from "@/lib/auth/emailTokens";
-import { sendEmail } from "@/lib/email/mailer";
-import { renderVerifyEmail } from "@/lib/email/templates/verifyAccount";
-import { getApiUrl } from "@/lib/url-helpers";
-import { ARGON2_HASH_OPTIONS } from "@/lib/auth/argon2Params";
-import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
+import { prisma } from "@/lib/server/db/prisma";
+import { createVerificationToken } from "@/lib/server/auth/emailTokens";
+import { sendEmail } from "@/lib/server/email/mailer";
+import { renderVerifyEmail } from "@/lib/server/email/templates/verifyAccount";
+import { getApiUrl } from "@/lib/shared/url-helpers";
+import { ARGON2_HASH_OPTIONS } from "@/lib/server/auth/argon2Params";
+import { Limiters, enforceRateLimit } from "@/lib/server/security/rateLimit";
 import argon2 from "argon2";
 
 export async function POST(req: Request) {

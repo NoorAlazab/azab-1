@@ -2,9 +2,9 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { IntegrationsTab } from '@/components/settings/IntegrationsTab';
-import { AccountTab } from '@/components/settings/AccountTab';
-import { PreferencesTab } from '@/components/settings/PreferencesTab';
+import { IntegrationsTab } from '@/components/features/settings/IntegrationsTab';
+import { AccountTab } from '@/components/features/settings/AccountTab';
+import { PreferencesTab } from '@/components/features/settings/PreferencesTab';
 import { Settings, Cable, User, Sliders } from 'lucide-react';
 
 export default function SettingsPage() {

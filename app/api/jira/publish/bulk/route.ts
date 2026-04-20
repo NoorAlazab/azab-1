@@ -1,8 +1,8 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { requireUserId } from "@/lib/auth/iron";
-import { assertValidCsrf } from "@/lib/security/csrf";
+import { prisma } from "@/lib/server/db/prisma";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
 
 // Internal function to save suite (reuse logic from save endpoint)
 async function saveSuite(userId: string, suiteId: string, payload: any) {
@@ -110,8 +110,8 @@ async function publishSuite(userId: string, suiteId: string, mode: "comment" | "
   
   try {
     // Import the publish logic directly instead of making HTTP calls
-    const { getFreshAccessTokenForUser } = await import("@/lib/jira/tokenService");
-    const { doc, paragraph, codeBlock } = await import("@/lib/jira/adf");
+    const { getFreshAccessTokenForUser } = await import("@/lib/server/jira/tokenService");
+    const { doc, paragraph, codeBlock } = await import("@/lib/server/jira/adf");
     
     // Get suite and cases
     suite = await prisma.testSuite.findFirst({ 

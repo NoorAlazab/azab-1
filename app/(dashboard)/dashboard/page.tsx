@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import { requireUserId } from "@/lib/auth/iron";
+import { requireUserId } from "@/lib/server/auth/iron";
 import {
   getDashboardOverview,
   DashboardUserNotFoundError,
-} from "@/lib/dashboard/getDashboardOverview";
+} from "@/lib/server/dashboard/getDashboardOverview";
 import { DashboardClient } from "./DashboardClient";
 
 /**

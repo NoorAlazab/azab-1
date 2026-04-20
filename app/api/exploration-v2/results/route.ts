@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { prisma } from '@/lib/db/prisma';
-import { log } from '@/lib/utils/logger';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { prisma } from '@/lib/server/db/prisma';
+import { log } from '@/lib/shared/utils/logger';
 
 /**
  * Get test execution results for a run

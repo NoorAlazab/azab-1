@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { runObjectiveBasedExploration, type ObjectiveRunnerInput } from '@/lib/exploration/objectiveRunner';
-import { runExploration, type RunnerInput } from '@/lib/exploration/runner';
-import { prisma } from '@/lib/db/prisma';
-import { makeAtlassianApiRequest, decryptToken } from '@/lib/oauth/atlassian';
-import { log } from '@/lib/utils/logger';
+import { runObjectiveBasedExploration, type ObjectiveRunnerInput } from '@/lib/server/exploration/objectiveRunner';
+import { runExploration, type RunnerInput } from '@/lib/server/exploration/runner';
+import { prisma } from '@/lib/server/db/prisma';
+import { makeAtlassianApiRequest, decryptToken } from '@/lib/server/oauth/atlassian';
+import { log } from '@/lib/shared/utils/logger';
 
 export const maxDuration = 300; // 5 minutes max
 

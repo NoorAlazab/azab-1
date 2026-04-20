@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { prisma } from '@/lib/db/prisma';
-import { getQuality } from '@/lib/exploration/objectiveQuality';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { prisma } from '@/lib/server/db/prisma';
+import { getQuality } from '@/lib/server/exploration/objectiveQuality';
 import type { Objective } from '@/types/exploration';
 
 export async function GET(request: NextRequest) {

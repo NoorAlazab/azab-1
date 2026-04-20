@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { requireUserId } from "@/lib/auth/iron";
-import { updateChecklistItem } from "@/lib/db/mock";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { updateChecklistItem } from "@/lib/server/db/mock";
 
 const updateChecklistSchema = z.object({
   item: z.enum(["connectJira", "configureLLM", "chooseStorageMode", "firstSuite"]),

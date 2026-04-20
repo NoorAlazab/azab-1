@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { getJiraConnection } from "@/lib/db/mock";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getJiraConnection } from "@/lib/server/db/mock";
 import { 
   makeAtlassianApiRequest, 
   decryptToken, 
   refreshAccessToken, 
   encryptToken 
-} from "@/lib/oauth/atlassian";
-import { saveJiraConnection } from "@/lib/db/mock";
+} from "@/lib/server/oauth/atlassian";
+import { saveJiraConnection } from "@/lib/server/db/mock";
 
 export async function GET(request: NextRequest) {
   try {

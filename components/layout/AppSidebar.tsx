@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/shared/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { brandAssets } from "@/lib/branding";
+import { brandAssets } from "@/lib/shared/branding";
 import {
   Home,
   FileText,

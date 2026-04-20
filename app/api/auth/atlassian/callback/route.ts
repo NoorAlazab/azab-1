@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { ENV } from "@/lib/env";
-import { readAndConsumePkceCookie } from "@/lib/auth/pkce";
-import { createOrUpdateJiraConnection } from "@/lib/db/database";
-import { encryptToken } from "@/lib/oauth/atlassian";
-import { prisma } from "@/lib/db/prisma";
-import { encrypt } from "@/lib/crypto/secrets";
-import { requireUserId } from "@/lib/auth/iron";
-import { getPKCESession } from "@/lib/db/mock";
+import { ENV } from "@/lib/shared/env";
+import { readAndConsumePkceCookie } from "@/lib/server/auth/pkce";
+import { createOrUpdateJiraConnection } from "@/lib/server/db/database";
+import { encryptToken } from "@/lib/server/oauth/atlassian";
+import { prisma } from "@/lib/server/db/prisma";
+import { encrypt } from "@/lib/server/crypto/secrets";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getPKCESession } from "@/lib/server/db/mock";
 import crypto from "crypto";
-import { log } from "@/lib/utils/logger";
+import { log } from "@/lib/shared/utils/logger";
 
 export const runtime = "nodejs";
 

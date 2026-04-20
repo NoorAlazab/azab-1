@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { getJiraConnection } from "@/lib/db/mock";
-import { getRecentStories, setRecentStories } from "@/lib/db/mock";
-import { makeAtlassianApiRequest, decryptToken } from "@/lib/oauth/atlassian";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getJiraConnection } from "@/lib/server/db/mock";
+import { getRecentStories, setRecentStories } from "@/lib/server/db/mock";
+import { makeAtlassianApiRequest, decryptToken } from "@/lib/server/oauth/atlassian";
 
 interface JiraSearchResponse {
   issues: Array<{

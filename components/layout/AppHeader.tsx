@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { brandAssets } from "@/lib/branding";
+import { brandAssets } from "@/lib/shared/branding";
 import { Menu } from "lucide-react";
 import { HeaderUser } from "./HeaderUser";
 

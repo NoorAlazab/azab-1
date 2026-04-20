@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/iron";
+import { getSession } from "@/lib/server/auth/iron";
 
 export async function POST(request: NextRequest) {
   try {
