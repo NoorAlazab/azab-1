@@ -1,4 +1,4 @@
-import { AppUser, SessionPayload, JiraConnection, JiraConnectionLegacy, MagicLinkToken } from "@/types/auth";
+import { AppUser, SessionPayload, JiraConnection, JiraConnectionLegacy } from "@/types/auth";
 
 /**
  * Hybrid storage layer.
@@ -7,12 +7,9 @@ import { AppUser, SessionPayload, JiraConnection, JiraConnectionLegacy, MagicLin
  * Prisma-backed via lib/db/checklist.ts, lib/db/activity.ts, and
  * lib/db/pkce.ts respectively, and re-exported below for back-compat.
  *
- * The remaining in-memory maps (sessions, magic links, JiraConnection
- * snapshot, recent stories cache) are scratch state we intentionally do
+ * The remaining in-memory maps are scratch state we intentionally do
  * not persist:
  *   - sessions: superseded by iron-session cookies for real sessions.
- *   - magicLinkTokens: short-lived; will move to Prisma when magic-link
- *     login is re-enabled.
  *   - jiraConnections: snapshot of the active site list is also persisted
  *     in the JiraConnection / JiraToken Prisma models; this map is just a
  *     fast cache for the dashboard.
@@ -21,7 +18,6 @@ import { AppUser, SessionPayload, JiraConnection, JiraConnectionLegacy, MagicLin
 const users = new Map<string, AppUser>(); // email -> user
 const usersByEmail = new Map<string, string>(); // email -> userId (for lookups)
 const sessions = new Map<string, SessionPayload>(); // sessionId -> session
-const magicLinkTokens = new Map<string, MagicLinkToken>(); // token -> magicLink
 const jiraConnections = new Map<string, JiraConnection>(); // userId -> jiraConnection
 
 // User operations
@@ -80,50 +76,6 @@ export async function getSession(sessionId: string): Promise<SessionPayload | nu
 
 export async function deleteSession(sessionId: string): Promise<void> {
   sessions.delete(sessionId);
-}
-
-// Magic link operations
-export async function createMagicLinkToken(token: string, email: string, expiresAt: Date): Promise<void> {
-  const magicLink: MagicLinkToken = {
-    token,
-    email,
-    expiresAt,
-    used: false,
-  };
-  
-  magicLinkTokens.set(token, magicLink);
-}
-
-export async function getMagicLinkToken(token: string): Promise<MagicLinkToken | null> {
-  const magicLink = magicLinkTokens.get(token);
-  
-  if (!magicLink) return null;
-  
-  // Check if token is expired
-  if (magicLink.expiresAt < new Date()) {
-    magicLinkTokens.delete(token);
-    return null;
-  }
-  
-  return magicLink;
-}
-
-export async function useMagicLinkToken(token: string): Promise<boolean> {
-  const magicLink = magicLinkTokens.get(token);
-  
-  if (!magicLink || magicLink.used || magicLink.expiresAt < new Date()) {
-    return false;
-  }
-  
-  magicLink.used = true;
-  magicLinkTokens.set(token, magicLink);
-  
-  // Delete token after use
-  setTimeout(() => {
-    magicLinkTokens.delete(token);
-  }, 1000);
-  
-  return true;
 }
 
 // Jira connection operations (updated for multi-site support)
@@ -326,17 +278,12 @@ export async function setRecentStories(userId: string, stories: JiraStory[]): Pr
   recentStoriesByUserId.set(userId, stories);
 }
 
-// Background cleanup for the still-in-memory stores (sessions, magic links).
-// PKCE expiry now happens lazily inside lib/db/pkce.ts (and via the index
-// on PkceSession.expiresAt for callers that explicitly prune).
+// Background cleanup for the still-in-memory session map. PKCE expiry
+// now happens lazily inside lib/db/pkce.ts (and via the index on
+// PkceSession.expiresAt for callers that explicitly prune).
 setInterval(() => {
   const now = new Date();
-
   sessions.forEach((session, sessionId) => {
     if (session.expiresAt < now) sessions.delete(sessionId);
-  });
-
-  magicLinkTokens.forEach((magicLink, token) => {
-    if (magicLink.expiresAt < now) magicLinkTokens.delete(token);
   });
 }, 60 * 1000);

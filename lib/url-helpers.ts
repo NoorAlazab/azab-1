@@ -69,15 +69,6 @@ export function getVerificationUrl(token: string): string {
 }
 
 /**
- * Build URL for magic link authentication
- * @param token - Magic link token
- * @returns Absolute magic link URL
- */
-export function getMagicLinkUrl(token: string): string {
-  return getApiUrl(`/api/auth/magic-link/callback?token=${encodeURIComponent(token)}`);
-}
-
-/**
  * Build URL for screenshot or evidence file
  * @param path - Relative path to file (e.g., '/explore/run123/screenshot.png')
  * @returns Absolute URL to file

@@ -21,7 +21,7 @@
  *
  * Identity:
  *   - For authenticated routes, prefer userId.
- *   - For anonymous routes (login, signup, magic-link), use IP.
+ *   - For anonymous routes (login, signup, verify-resend), use IP.
  *   - The `getIdentifier` helper composes these consistently.
  */
 
@@ -201,7 +201,7 @@ function getOrMake(cfg: LimiterConfig): RateLimiter {
  * magic numbers so we have one place to tune limits.
  */
 export const Limiters = {
-  /** Login / signup / magic-link / verify — strict, per IP. */
+  /** Login / signup / verify-resend — strict, per IP. */
   auth: () =>
     getOrMake({ name: "auth", requests: 10, windowMs: 60_000 }),
   /** AI generation (draft, stream) — moderate, per user. */

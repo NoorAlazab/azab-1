@@ -48,13 +48,6 @@ export interface JiraConnectionLegacy {
   updatedAt: Date;
 }
 
-export interface MagicLinkToken {
-  token: string;
-  email: string;
-  expiresAt: Date;
-  used: boolean;
-}
-
 export interface PKCESession {
   nonce: string;
   codeVerifier: string;
