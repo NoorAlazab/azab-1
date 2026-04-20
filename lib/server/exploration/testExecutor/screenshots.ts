@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Page } from "playwright";
-import { log } from "@/lib/utils/logger";
+import { log } from "@/lib/shared/utils/logger";
 
 /**
  * Capture a Playwright screenshot to disk and return a public web path.

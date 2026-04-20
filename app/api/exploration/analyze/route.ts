@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireUserId } from '@/lib/server/auth/iron';
 import { getJiraConnection } from '@/lib/server/db/database';
 import { prisma } from '@/lib/server/db/prisma';
-import { synthesizeCases } from '@/lib/tests/caseSynth';
+import { synthesizeCases } from '@/lib/shared/tests/caseSynth';
 import { buildPlan } from '@/lib/server/exploration/planFromStory';
 import { getQuality, meetsQualityThreshold } from '@/lib/server/exploration/objectiveQuality';
 import { makeAtlassianApiRequest, decryptToken } from '@/lib/server/oauth/atlassian';
 import { identifyPagesFromStory } from '@/lib/server/exploration/pageIdentifier';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 export const runtime = 'nodejs';
 

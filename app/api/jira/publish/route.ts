@@ -5,7 +5,7 @@ import { requireUserId } from "@/lib/server/auth/iron";
 import { getFreshAccessTokenForUser } from "@/lib/server/jira/tokenService";
 import { paragraph, codeBlock, doc, heading, orderedList, paragraphWithStrong } from "@/lib/server/jira/adf";
 import { assertValidCsrf } from "@/lib/server/security/csrf";
-import { safeStringify, toDisplayDetail } from "@/lib/utils/safeStringify";
+import { safeStringify, toDisplayDetail } from "@/lib/shared/utils/safeStringify";
 import { Limiters, enforceRateLimit } from "@/lib/server/security/rateLimit";
 
 export async function POST(req: Request) {

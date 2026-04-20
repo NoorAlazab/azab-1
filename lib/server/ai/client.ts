@@ -3,7 +3,7 @@
  * Supports Groq, OpenAI, and Anthropic APIs (prefers Groq if available)
  */
 
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 interface AIMessage {
   role: "system" | "user" | "assistant";

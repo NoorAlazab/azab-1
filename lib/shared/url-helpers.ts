@@ -3,7 +3,7 @@
  * Centralized place for building application URLs
  */
 
-import { ENV } from '@/lib/env';
+import { ENV } from '@/lib/shared/env';
 
 /**
  * Get the base application URL

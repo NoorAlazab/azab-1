@@ -12,7 +12,7 @@ import type {
   FindElementOptions,
   SelectorRepositoryConfig,
 } from '@/types/selectors';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 import fs from 'fs';
 import path from 'path';
 

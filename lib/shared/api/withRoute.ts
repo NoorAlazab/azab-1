@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { ZodSchema, ZodError } from "zod";
-import { apiError } from "@/lib/api/response";
+import { apiError } from "@/lib/shared/api/response";
 import { assertValidCsrf } from "@/lib/server/security/csrf";
 import { requireUserId } from "@/lib/server/auth/iron";
 import {

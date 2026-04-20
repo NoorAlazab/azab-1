@@ -10,8 +10,8 @@ import { verifyTextExists, verifyUrl, type VerificationResult } from './verifica
 import { findElementByKey } from './selectorRepository';
 import { mapToElementKey, inferPageName } from './elementKeyMapper';
 import { findJourneyByKeyword } from './journeyRepository';
-import { log } from '@/lib/utils/logger';
-import { normalizePageKeyword } from '@/lib/utils/pageKeywordNormalizer';
+import { log } from '@/lib/shared/utils/logger';
+import { normalizePageKeyword } from '@/lib/shared/utils/pageKeywordNormalizer';
 import { saveStepToDatabase } from './testExecutor/db';
 import { captureScreenshot } from './testExecutor/screenshots';
 import type {

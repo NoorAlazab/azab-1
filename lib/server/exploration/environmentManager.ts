@@ -11,7 +11,7 @@ import type {
   PagesMetadata,
   PageRecordingMetadata
 } from '@/types/environment';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 /**
  * Normalize environment URL to create a consistent slug

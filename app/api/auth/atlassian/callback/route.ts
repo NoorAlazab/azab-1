@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ENV } from "@/lib/env";
+import { ENV } from "@/lib/shared/env";
 import { readAndConsumePkceCookie } from "@/lib/server/auth/pkce";
 import { createOrUpdateJiraConnection } from "@/lib/server/db/database";
 import { encryptToken } from "@/lib/server/oauth/atlassian";
@@ -8,7 +8,7 @@ import { encrypt } from "@/lib/server/crypto/secrets";
 import { requireUserId } from "@/lib/server/auth/iron";
 import { getPKCESession } from "@/lib/server/db/mock";
 import crypto from "crypto";
-import { log } from "@/lib/utils/logger";
+import { log } from "@/lib/shared/utils/logger";
 
 export const runtime = "nodejs";
 

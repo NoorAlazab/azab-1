@@ -1,5 +1,5 @@
 import { generateCodeVerifier, generateCodeChallenge, randomId } from "@/lib/server/crypto";
-import { getEnv } from "@/lib/env";
+import { getEnv } from "@/lib/shared/env";
 import { AtlassianTokenResponse, AtlassianResource, AtlassianMe } from "@/types/api";
 import { PKCESession } from "@/types/auth";
 import { savePKCESession, getPKCESession, deletePKCESession } from "@/lib/server/db/mock";

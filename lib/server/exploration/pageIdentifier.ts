@@ -4,7 +4,7 @@
  * Uses AI analysis + keyword matching for accuracy
  */
 
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 // Common page keywords and their normalized names
 const PAGE_KEYWORDS: Record<string, string[]> = {

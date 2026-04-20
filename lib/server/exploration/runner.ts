@@ -2,7 +2,7 @@ import { prisma } from '@/lib/server/db/prisma';
 import fs from 'fs';
 import path from 'path';
 import type { Page } from 'playwright';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 export interface RunnerInput {
   runId: string;

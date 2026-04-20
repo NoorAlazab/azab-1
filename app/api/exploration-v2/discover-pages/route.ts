@@ -4,7 +4,7 @@ import { normalizeEnvironmentUrl } from '@/lib/server/exploration/environmentMan
 import { discoverPages } from '@/lib/server/exploration/pageDiscovery';
 import { recordSelectorsWithJourneys } from '@/lib/server/exploration/selectorRecorder';
 import type { DiscoverPagesRequest, DiscoveryResult } from '@/types/journey';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 export const maxDuration = 300; // 5 minutes max for discovery
 

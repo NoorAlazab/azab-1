@@ -4,7 +4,7 @@ import { prisma } from "@/lib/server/db/prisma";
 import { createVerificationToken } from "@/lib/server/auth/emailTokens";
 import { sendEmail } from "@/lib/server/email/mailer";
 import { renderVerifyEmail } from "@/lib/server/email/templates/verifyAccount";
-import { getApiUrl } from "@/lib/url-helpers";
+import { getApiUrl } from "@/lib/shared/url-helpers";
 import { Limiters, enforceRateLimit } from "@/lib/server/security/rateLimit";
 
 export async function POST(req: Request) {

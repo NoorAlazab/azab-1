@@ -23,7 +23,7 @@ import type { WriteMode, TestStep } from "@/lib/server/generator/types";
 import { useCsrfToken } from "@/components/useCsrf";
 import { useToast } from "@/hooks/use-toast";
 import { ResultModal } from "@/components/ui/result-modal";
-import { toDisplayDetail } from "@/lib/utils/safeStringify";
+import { toDisplayDetail } from "@/lib/shared/utils/safeStringify";
 import type { StoryItem, BulkPublishResult, TestCaseDTO } from "./_internal/types";
 import { transformJiraResponse } from "./_internal/utils";
 import { BulkResultsModal } from "./_internal/BulkResultsModal";

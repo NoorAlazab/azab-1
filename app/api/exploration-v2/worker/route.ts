@@ -3,7 +3,7 @@ import { runObjectiveBasedExploration, type ObjectiveRunnerInput } from '@/lib/s
 import { runExploration, type RunnerInput } from '@/lib/server/exploration/runner';
 import { prisma } from '@/lib/server/db/prisma';
 import { makeAtlassianApiRequest, decryptToken } from '@/lib/server/oauth/atlassian';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 export const maxDuration = 300; // 5 minutes max
 

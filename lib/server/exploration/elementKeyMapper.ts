@@ -5,7 +5,7 @@
  */
 
 import { getElementKeys, loadSelectorMapping } from './selectorRepository';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 /**
  * Extract element key from backtick notation

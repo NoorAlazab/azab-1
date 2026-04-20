@@ -1,8 +1,8 @@
 import type { Page } from "playwright";
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 import type { PageJourney, NavigationItem, JourneyStep } from '@/types/journey';
 import type { ElementSelector } from '@/types/selectors';
-import { normalizePageKeyword } from '@/lib/utils/pageKeywordNormalizer';
+import { normalizePageKeyword } from '@/lib/shared/utils/pageKeywordNormalizer';
 
 /**
  * Discover login/authentication pages from base URL

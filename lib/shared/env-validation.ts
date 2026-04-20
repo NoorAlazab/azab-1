@@ -4,7 +4,7 @@
  */
 
 import { z } from 'zod';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 // Define environment schema with validation rules
 const envSchema = z.object({

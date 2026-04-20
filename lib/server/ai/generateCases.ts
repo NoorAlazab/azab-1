@@ -1,4 +1,4 @@
-import { log } from "@/lib/utils/logger";
+import { log } from "@/lib/shared/utils/logger";
 import { loadSelectorMapping } from "@/lib/server/exploration/selectorRepository";
 import {
   buildGenerateCasesPrompt,

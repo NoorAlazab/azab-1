@@ -4,9 +4,9 @@
  */
 
 import { prisma } from './prisma';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 import type { ElementSelector, SelectorMapping } from '@/types/selectors';
-import { normalizePageKeyword } from '@/lib/utils/pageKeywordNormalizer';
+import { normalizePageKeyword } from '@/lib/shared/utils/pageKeywordNormalizer';
 
 // Navigation step type
 export interface NavigationStep {

@@ -3,8 +3,8 @@ import { requireUserId } from '@/lib/server/auth/iron';
 import { recordSelectorsWithJourneys, createPageMetadata } from '@/lib/server/exploration/selectorRecorder';
 import { saveEnvironmentConfig, normalizeEnvironmentUrl, updatePagesMetadata } from '@/lib/server/exploration/environmentManager';
 import type { RecordSelectorsRequest, RecordSelectorsResponse } from '@/types/environment';
-import { log } from '@/lib/utils/logger';
-import { normalizePageKeyword } from '@/lib/utils/pageKeywordNormalizer';
+import { log } from '@/lib/shared/utils/logger';
+import { normalizePageKeyword } from '@/lib/shared/utils/pageKeywordNormalizer';
 
 export const maxDuration = 300; // 5 minutes max for recording
 

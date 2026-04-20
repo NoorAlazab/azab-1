@@ -7,7 +7,7 @@
 import { loadSelectorMapping } from './selectorRepository';
 import { mapToElementKey } from './elementKeyMapper';
 import { parseStep } from './stepParser';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 /**
  * Enhance test steps with element keys from selector repository

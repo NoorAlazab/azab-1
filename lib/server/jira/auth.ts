@@ -3,7 +3,7 @@ import { prisma } from "@/lib/server/db/prisma";
 import { JiraError } from "./errors";
 import { getSession } from "@/lib/server/auth/iron";
 import { decrypt } from "@/lib/server/crypto/secrets";
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 export interface JiraSession {
   accessToken: string;

@@ -2,8 +2,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import { generateCasesAIStream, type StreamEvent } from "@/lib/server/ai/generateCasesStream";
-import { withRoute } from "@/lib/api/withRoute";
-import { apiError } from "@/lib/api/response";
+import { withRoute } from "@/lib/shared/api/withRoute";
+import { apiError } from "@/lib/shared/api/response";
 import { Limiters } from "@/lib/server/security/rateLimit";
 import { z } from "zod";
 

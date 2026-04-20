@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { apiOk, apiError } from "@/lib/api/response";
+import { apiOk, apiError } from "@/lib/shared/api/response";
 
 describe("api/response — apiOk", () => {
   it("wraps data in ok envelope and defaults to 200", async () => {

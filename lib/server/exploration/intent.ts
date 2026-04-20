@@ -3,7 +3,7 @@
  * Determines what kind of testing is needed based on story content
  */
 
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 
 export type StoryIntent =
   | "UI_TEXT_CHANGE"

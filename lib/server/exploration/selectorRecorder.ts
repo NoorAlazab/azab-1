@@ -5,7 +5,7 @@
  */
 
 import type { Page } from 'playwright';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 import type {
   SelectorRecordingResult,
   EnvironmentCredentials,

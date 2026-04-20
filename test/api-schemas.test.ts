@@ -6,7 +6,7 @@ import {
   loginSchema,
   signupSchema,
   testCaseInputSchema,
-} from "@/lib/api/schemas";
+} from "@/lib/shared/api/schemas";
 
 describe("api/schemas — issueKeySchema", () => {
   it.each([["ABC-1"], ["FOO-9999"], ["A1-1"], ["MY_PROJ-42"]])(

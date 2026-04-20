@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireUserId } from '@/lib/server/auth/iron';
 import { prisma } from '@/lib/server/db/prisma';
 import { executeTestSuite, type TestCase } from '@/lib/server/exploration/testExecutor';
-import { generatePlaceholderScreenshot } from '@/lib/utils/placeholderScreenshot';
+import { generatePlaceholderScreenshot } from '@/lib/shared/utils/placeholderScreenshot';
 import { normalizeEnvironmentUrl } from '@/lib/server/exploration/environmentManager';
-import { log } from '@/lib/utils/logger';
+import { log } from '@/lib/shared/utils/logger';
 import path from 'path';
 
 export const maxDuration = 300; // 5 minutes max
