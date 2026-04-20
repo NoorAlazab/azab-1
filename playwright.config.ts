@@ -1,12 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Playwright configuration for QA CaseForge
- * Used for exploration testing and selector recording
+ * Playwright configuration for QA CaseForge.
+ *
+ * Test layout follows a strict Page Object Model under tests/e2e/:
+ *   tests/e2e/pages/      - Page Objects (one class per route)
+ *   tests/e2e/fixtures/   - shared fixtures (auth, test data)
+ *   tests/e2e/specs/      - actual *.spec.ts files (the only ones picked up)
+ *
+ * See tests/e2e/README.md for conventions.
  */
 export default defineConfig({
-  // Test directory
-  testDir: './e2e',
+  testDir: './tests/e2e/specs',
 
   // Maximum time one test can run
   timeout: 60 * 1000,
