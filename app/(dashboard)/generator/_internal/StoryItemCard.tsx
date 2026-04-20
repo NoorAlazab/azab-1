@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Wand2, Save, Send } from "lucide-react";
-import { TestCaseCard } from "@/components/generator/TestCaseCard";
+import { TestCaseCard } from "@/components/features/generator/TestCaseCard";
 import { useToast } from "@/hooks/use-toast";
 import type { TestCase } from "@/lib/server/generator/types";
 import type { StoryItem, TestCaseDTO } from "./types";
