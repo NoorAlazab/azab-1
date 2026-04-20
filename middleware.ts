@@ -27,13 +27,9 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/generator/:path*",
-    "/exploration/:path*",
     "/exploration-v2/:path*",
     "/integrations/:path*",
     "/settings/:path*",
-    "/jira-preflight/:path*",
-    "/oauth-debug/:path*",
-    "/reconnect-jira/:path*",
   ],
 };
 
