@@ -21,7 +21,7 @@ import {
 import { Wand2, Save, Send } from "lucide-react";
 import { TestCaseCard } from "@/components/generator/TestCaseCard";
 import { useToast } from "@/hooks/use-toast";
-import type { TestCase } from "@/lib/generator/types";
+import type { TestCase } from "@/lib/server/generator/types";
 import type { StoryItem, TestCaseDTO } from "./types";
 import { timeAgo } from "./utils";
 

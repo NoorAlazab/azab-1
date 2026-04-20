@@ -6,8 +6,8 @@ import { Separator } from '@/components/ui/separator';
 import { ChevronDown, ChevronRight, ExternalLink, Wand2, Settings, RefreshCw } from 'lucide-react';
 import { TestCasesList } from './TestCasesList';
 import Link from 'next/link';
-import type { JiraStoryDetails } from '@/lib/generator/types';
-import type { TestCase } from '@/lib/generator/types';
+import type { JiraStoryDetails } from '@/lib/server/generator/types';
+import type { TestCase } from '@/lib/server/generator/types';
 
 interface StoryCardProps {
   story: JiraStoryDetails;

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { prisma } from '@/lib/db/prisma';
-import { executeTestSuite, type TestCase } from '@/lib/exploration/testExecutor';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { prisma } from '@/lib/server/db/prisma';
+import { executeTestSuite, type TestCase } from '@/lib/server/exploration/testExecutor';
 import { generatePlaceholderScreenshot } from '@/lib/utils/placeholderScreenshot';
-import { normalizeEnvironmentUrl } from '@/lib/exploration/environmentManager';
+import { normalizeEnvironmentUrl } from '@/lib/server/exploration/environmentManager';
 import { log } from '@/lib/utils/logger';
 import path from 'path';
 
@@ -237,7 +237,7 @@ async function executeTestsAsync(
     });
 
     // Get environmentConfigId for database-first selector loading
-    const { getEnvironmentConfig } = await import('@/lib/exploration/environmentManager');
+    const { getEnvironmentConfig } = await import('@/lib/server/exploration/environmentManager');
     const envConfig = await getEnvironmentConfig(userId, environment);
     const environmentConfigId = envConfig?.id;
 
@@ -256,7 +256,7 @@ async function executeTestsAsync(
         console.log('[ExecuteAsync] Decrypting stored credentials for protected pages');
         log.debug('Decrypting credentials', { module: 'ExplorationExecute', runId });
 
-        const { decryptCredentials } = await import('@/lib/crypto/credentials');
+        const { decryptCredentials } = await import('@/lib/server/crypto/credentials');
         credentials = decryptCredentials(envConfig.usernameEncrypted, envConfig.passwordEncrypted);
 
         console.log('[ExecuteAsync] Credentials decrypted, username:', credentials.username);

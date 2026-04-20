@@ -1,4 +1,4 @@
-import type { TestCase } from "@/lib/generator/types";
+import type { TestCase } from "@/lib/server/generator/types";
 
 /**
  * Page-local types for the Generator dashboard.

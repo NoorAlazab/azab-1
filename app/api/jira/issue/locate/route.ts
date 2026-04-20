@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { decryptToken } from "@/lib/oauth/atlassian";
-import { assertValidCsrf } from "@/lib/security/csrf";
-import { getJiraConnection } from "@/lib/db/mock";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { decryptToken } from "@/lib/server/oauth/atlassian";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
+import { getJiraConnection } from "@/lib/server/db/mock";
 
 export const runtime = "nodejs";
 

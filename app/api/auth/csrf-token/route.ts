@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { issueCsrfToken } from "@/lib/security/csrf";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { issueCsrfToken } from "@/lib/server/security/csrf";
 
 export async function GET(request: NextRequest) {
   try {

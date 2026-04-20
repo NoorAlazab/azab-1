@@ -10,7 +10,7 @@ import {
   getIdentifier,
   rateLimitHeaders,
   type RateLimiter,
-} from "@/lib/security/rateLimit";
+} from "@/lib/server/security/rateLimit";
 
 // The production MemoryLimiter is module-private, but its behaviour is
 // the contract — we re-implement it inline so the test fails loudly if

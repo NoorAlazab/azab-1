@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Plus, Search, Filter, Download, Upload, Trash2, Copy, Wand2 } from 'lucide-react';
 import { TestCaseCard } from './TestCaseCard';
 
-import type { TestCase, TestStep } from '@/lib/generator/types';
+import type { TestCase, TestStep } from '@/lib/server/generator/types';
 
 interface TestCasesListProps {
   cases: TestCase[];

@@ -3,7 +3,7 @@ import {
   fetchWithRetry,
   isRetryableStatus,
   parseRetryAfterMs,
-} from "@/lib/jira/retry";
+} from "@/lib/server/jira/retry";
 
 function jsonResponse(status: number, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify({ status }), {

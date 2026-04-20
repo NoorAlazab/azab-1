@@ -1,12 +1,12 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { requireUserId } from "@/lib/auth/iron";
-import { getFreshAccessTokenForUser } from "@/lib/jira/tokenService";
-import { paragraph, codeBlock, doc, heading, orderedList, paragraphWithStrong } from "@/lib/jira/adf";
-import { assertValidCsrf } from "@/lib/security/csrf";
+import { prisma } from "@/lib/server/db/prisma";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getFreshAccessTokenForUser } from "@/lib/server/jira/tokenService";
+import { paragraph, codeBlock, doc, heading, orderedList, paragraphWithStrong } from "@/lib/server/jira/adf";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
 import { safeStringify, toDisplayDetail } from "@/lib/utils/safeStringify";
-import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
+import { Limiters, enforceRateLimit } from "@/lib/server/security/rateLimit";
 
 export async function POST(req: Request) {
   try { assertValidCsrf(); } catch(e:any){ return new Response(JSON.stringify({error:"Invalid CSRF token"}), {status:403}); }

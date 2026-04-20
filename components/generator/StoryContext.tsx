@@ -15,7 +15,7 @@ import {
   User,
   Calendar
 } from "lucide-react";
-import type { JiraStoryDetails } from "@/lib/generator/types";
+import type { JiraStoryDetails } from "@/lib/server/generator/types";
 
 interface StoryContextProps {
   story?: JiraStoryDetails;

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   buildGenerateCasesPrompt,
   buildSelectorContext,
-} from "@/lib/ai/prompts/generateCases";
+} from "@/lib/server/ai/prompts/generateCases";
 
 describe("ai/prompts — buildGenerateCasesPrompt", () => {
   const base = {

@@ -1,9 +1,9 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { requireUserId } from "@/lib/auth/iron";
-import { assertValidCsrf } from "@/lib/security/csrf";
-import { deserializeSteps } from "@/lib/generator/stepsJson";
+import { prisma } from "@/lib/server/db/prisma";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
+import { deserializeSteps } from "@/lib/server/generator/stepsJson";
 
 export async function POST(req: Request) {
   try { assertValidCsrf(); } catch (e:any) {

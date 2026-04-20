@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { verifyToken } from "@/lib/auth/emailTokens";
+import { prisma } from "@/lib/server/db/prisma";
+import { verifyToken } from "@/lib/server/auth/emailTokens";
 
 export async function GET(req: NextRequest) {
   try {

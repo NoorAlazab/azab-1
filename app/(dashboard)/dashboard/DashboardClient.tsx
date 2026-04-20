@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RefreshCw, AlertCircle } from "lucide-react";
-import type { DashboardOverview } from "@/lib/dashboard/getDashboardOverview";
+import type { DashboardOverview } from "@/lib/server/dashboard/getDashboardOverview";
 
 /**
  * Dashboard interactive shell.

@@ -1,4 +1,4 @@
-import type { JiraStoryDetails } from "@/lib/generator/types";
+import type { JiraStoryDetails } from "@/lib/server/generator/types";
 
 /**
  * Pure helpers used by the Generator dashboard. No React, no fetch — keep

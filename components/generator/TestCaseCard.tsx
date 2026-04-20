@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Trash2, Edit3, Check, X, Plus, GripVertical } from 'lucide-react';
 
-import type { TestCase, TestStep } from '@/lib/generator/types';
+import type { TestCase, TestStep } from '@/lib/server/generator/types';
 
 interface TestCaseCardProps {
   testCase: TestCase;

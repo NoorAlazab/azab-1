@@ -6,7 +6,7 @@ import {
   generateCodeVerifier, 
   generateCodeChallenge,
   constantTimeEqual 
-} from '@/lib/crypto';
+} from '@/lib/server/crypto';
 
 describe('Crypto utilities', () => {
   describe('randomId', () => {

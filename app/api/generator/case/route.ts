@@ -1,9 +1,9 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { requireUserId } from "@/lib/auth/iron";
-import { assertValidCsrf } from "@/lib/security/csrf";
-import { serializeSteps } from "@/lib/generator/stepsJson";
+import { prisma } from "@/lib/server/db/prisma";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
+import { serializeSteps } from "@/lib/server/generator/stepsJson";
 
 export async function POST(req: Request) { // add
   try { assertValidCsrf(); } catch(e:any){ return new Response(JSON.stringify({error:"Invalid CSRF token"}), {status:403}); }

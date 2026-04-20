@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import type { ZodSchema, ZodError } from "zod";
 import { apiError } from "@/lib/api/response";
-import { assertValidCsrf } from "@/lib/security/csrf";
-import { requireUserId } from "@/lib/auth/iron";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
+import { requireUserId } from "@/lib/server/auth/iron";
 import {
   getIdentifier,
   rateLimitHeaders,
   type RateLimiter,
-} from "@/lib/security/rateLimit";
+} from "@/lib/server/security/rateLimit";
 
 /**
  * Higher-order wrapper for App Router route handlers.

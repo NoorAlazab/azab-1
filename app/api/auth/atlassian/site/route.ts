@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { getJiraConnection, updateActiveJiraSite } from "@/lib/db/mock";
-import { assertValidCsrf } from "@/lib/security/csrf";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getJiraConnection, updateActiveJiraSite } from "@/lib/server/db/mock";
+import { assertValidCsrf } from "@/lib/server/security/csrf";
 import { z } from "zod";
 
 const SetActiveSiteSchema = z.object({

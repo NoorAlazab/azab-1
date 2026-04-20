@@ -1,10 +1,10 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db/prisma";
-import { setUserInSession } from "@/lib/auth/iron";
-import { getDummyHashForTimingMitigation } from "@/lib/auth/argon2Params";
+import { prisma } from "@/lib/server/db/prisma";
+import { setUserInSession } from "@/lib/server/auth/iron";
+import { getDummyHashForTimingMitigation } from "@/lib/server/auth/argon2Params";
 import argon2 from "argon2";
-import { Limiters, enforceRateLimit } from "@/lib/security/rateLimit";
+import { Limiters, enforceRateLimit } from "@/lib/server/security/rateLimit";
 
 export async function POST(req: Request) {
   // Per-IP rate limit BEFORE any DB or argon2 work so we cannot be

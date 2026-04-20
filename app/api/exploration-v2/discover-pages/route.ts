@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { normalizeEnvironmentUrl } from '@/lib/exploration/environmentManager';
-import { discoverPages } from '@/lib/exploration/pageDiscovery';
-import { recordSelectorsWithJourneys } from '@/lib/exploration/selectorRecorder';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { normalizeEnvironmentUrl } from '@/lib/server/exploration/environmentManager';
+import { discoverPages } from '@/lib/server/exploration/pageDiscovery';
+import { recordSelectorsWithJourneys } from '@/lib/server/exploration/selectorRecorder';
 import type { DiscoverPagesRequest, DiscoveryResult } from '@/types/journey';
 import { log } from '@/lib/utils/logger';
 
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       );
 
       // Load the site map that was created by recordSelectorsWithJourneys
-      const { loadSiteMap } = await import('@/lib/exploration/journeyRepository');
+      const { loadSiteMap } = await import('@/lib/server/exploration/journeyRepository');
       const siteMap = await loadSiteMap(environmentSlug);
 
       const response: DiscoveryResult = {

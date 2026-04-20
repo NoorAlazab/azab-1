@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/iron";
-import { getJiraConnection } from "@/lib/db/mock";
+import { getSession } from "@/lib/server/auth/iron";
+import { getJiraConnection } from "@/lib/server/db/mock";
 
 export const runtime = "nodejs";
 

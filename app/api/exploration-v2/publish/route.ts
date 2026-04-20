@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireUserId } from '@/lib/auth/iron';
-import { getJiraConnection } from '@/lib/db/database';
-import { prisma } from '@/lib/db/prisma';
-import { makeAtlassianApiRequest, decryptToken } from '@/lib/oauth/atlassian';
+import { requireUserId } from '@/lib/server/auth/iron';
+import { getJiraConnection } from '@/lib/server/db/database';
+import { prisma } from '@/lib/server/db/prisma';
+import { makeAtlassianApiRequest, decryptToken } from '@/lib/server/oauth/atlassian';
 import { getEvidenceUrl } from '@/lib/url-helpers';
 import { z } from 'zod';
 

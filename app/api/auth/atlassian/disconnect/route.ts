@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { getJiraConnection, deleteJiraConnection } from "@/lib/db/mock";
-import { revokeTokens, decryptToken } from "@/lib/oauth/atlassian";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { getJiraConnection, deleteJiraConnection } from "@/lib/server/db/mock";
+import { revokeTokens, decryptToken } from "@/lib/server/oauth/atlassian";
 import { DisconnectResponse } from "@/types/api";
 
 export async function POST(request: NextRequest) {

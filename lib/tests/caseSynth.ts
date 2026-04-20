@@ -1,5 +1,5 @@
 import type { SynthesizedCase } from "@/types/exploration";
-import { loadSelectorMapping } from '@/lib/exploration/selectorRepository';
+import { loadSelectorMapping } from '@/lib/server/exploration/selectorRepository';
 
 export interface SynthInput {
   summary: string;

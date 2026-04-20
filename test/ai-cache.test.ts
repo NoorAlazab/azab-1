@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { TTLCache, hashKey } from "@/lib/ai/cache";
+import { TTLCache, hashKey } from "@/lib/server/ai/cache";
 
 describe("ai/cache — TTLCache", () => {
   it("stores and retrieves values", () => {

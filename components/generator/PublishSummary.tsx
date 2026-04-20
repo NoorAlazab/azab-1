@@ -27,7 +27,7 @@ import type {
   DraftResponse, 
   DraftPayload,
   PublishResponse 
-} from "@/lib/generator/types";
+} from "@/lib/server/generator/types";
 
 interface PublishSummaryProps {
   story?: JiraStoryDetails;

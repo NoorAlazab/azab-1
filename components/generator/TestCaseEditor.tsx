@@ -19,7 +19,7 @@ import {
   ChevronDown,
   ChevronRight
 } from "lucide-react";
-import type { TestCase, TestStep, TestPriority, TestType } from "@/lib/generator/types";
+import type { TestCase, TestStep, TestPriority, TestType } from "@/lib/server/generator/types";
 
 interface TestCaseEditorProps {
   cases: TestCase[];

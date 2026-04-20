@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireUserId } from "@/lib/auth/iron";
-import { generateAuthUrl } from "@/lib/oauth/atlassian";
+import { requireUserId } from "@/lib/server/auth/iron";
+import { generateAuthUrl } from "@/lib/server/oauth/atlassian";
 import { AtlassianStartResponse } from "@/types/api";
 
 export async function POST(request: NextRequest) {
